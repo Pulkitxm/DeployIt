@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 import Navbar from "@/components/Navbar";
-import ThemeProvider from "@/providers/ThemeProvider";
+import AppWrapper from "../providers/app-wrapper";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -11,17 +11,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <ThemeProvider>
-          
+        <AppWrapper>
           <Navbar />
-          
-          {children}</ThemeProvider>
+          {children}
+        </AppWrapper>
       </body>
     </html>
   );

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/ui/ThemeToggle";
+import { signIn } from "next-auth/react";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -68,7 +69,9 @@ export default function Navbar() {
             <Button variant="ghost" size="sm">
               Log in
             </Button>
-            <Button size="sm">Sign up</Button>
+            <Button size="sm" onClick={() => signIn()}>
+              Sign up
+            </Button>
           </div>
           <div className="flex items-center sm:hidden">
             <ThemeToggle />
