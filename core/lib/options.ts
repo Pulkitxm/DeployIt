@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import { prisma } from "@/db";
 import { NextAuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 
@@ -19,88 +19,87 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async signIn({ user, account, profile }) {
+      if (!profile || !account) return false;
+
+      const github_id = profile.id ? parseInt(profile.id) : 0;
+      if (!github_id) return false;
+
       const db_data = {
-        name: profile?.name,
-        email: user?.email,
-        avatar_url: profile?.avatar_url,
-        bio: profile?.bio,
-        id: parseInt(profile?.id ?? ""),
-        access_token: account?.access_token,
+        github_id,
+        name: profile.name ?? user.name ?? profile.login ?? "",
+        email: user.email ?? "",
+        avatar_url: profile.avatar_url,
+        bio: profile.bio,
+        access_token: account.access_token ?? "",
+        username: profile.login ?? "",
       };
 
-      if (!db_data.name) {
-        db_data.name = db_data.email?.split("@")[0];
+      if (
+        !db_data.name ||
+        !db_data.email ||
+        !db_data.access_token ||
+        !db_data.username
+      ) {
+        return false;
       }
 
-      const nonNullableFiels: (keyof typeof db_data)[] = [
-        "name",
-        "email",
-        "avatar_url",
-        "id",
-        "access_token",
-      ];
-      for (const field of nonNullableFiels) {
-        if (!db_data[field]) {
-          return false;
-        }
-      }
-      try {
-        // await prisma.user.create({
-        //   data: {
-        //     access_token: db_data.access_token!,
-        //     avatar: db_data.avatar_url!,
-        //     bio: db_data.bio!,
-        //     email: db_data.email!,
-        //     github_id: db_data.id!,
-        //     name: db_data.name!,
-        //   },
-        // });
+      const upsertedUser = await prisma.user.upsert({
+        where: { github_id: db_data.github_id },
+        create: {
+          github_id: db_data.github_id,
+          access_token: db_data.access_token,
+          avatar: db_data.avatar_url ?? "",
+          bio: db_data.bio ?? "",
+          email: db_data.email,
+          name: db_data.name,
+          github_username: db_data.username,
+        },
+        update: {
+          access_token: db_data.access_token,
+          avatar: db_data.avatar_url,
+          bio: db_data.bio,
+          email: db_data.email,
+          name: db_data.name,
+          github_username: db_data.username,
+        },
+      });
 
-        const res = await prisma.user.upsert({
-          where: {
-            github_id: db_data.id!,
-          },
-          create: {
-            access_token: db_data.access_token!,
-            avatar: db_data.avatar_url!,
-            bio: db_data.bio!,
-            email: db_data.email!,
-            github_id: db_data.id!,
-            name: db_data.name!,
-          },
-          update: {
-            access_token: db_data.access_token!,
-            avatar: db_data.avatar_url!,
-            bio: db_data.bio!,
-            email: db_data.email!,
-            github_id: db_data.id!,
-            name: db_data.name!,
-          },
-        });
-        console.log(res);
-      } catch (error) {
-        console.log(error);
-      }
+      // Assign the database-generated ID and GitHub ID to the user object
+      user.id = upsertedUser.id; // Database ID (string)
+      user.github_id = upsertedUser.github_id; // GitHub ID (number)
 
       return true;
     },
 
-    async session({ session, token }) {
-      if (session.user) {
-        session.user.bio = token.bio as string | undefined;
-        session.user.avatar_url = token.avatar_url as string | undefined;
-      }
-      return session;
-    },
-
     async jwt({ token, user, profile }) {
       if (user) {
-        token.id = user.id;
-        token.bio = profile?.bio as string | undefined;
-        token.avatar_url = profile?.avatar_url as string | undefined;
+        token.id = user.id; // Database ID (string)
+        token.github_id = user.github_id; // GitHub ID (number)
         token.name = user.name;
+        token.email = user.email;
+        token.username = (profile?.login as string) ?? "";
+      }
+      if (profile) {
+        token.bio = profile.bio as string | undefined;
+        token.avatar_url = profile.avatar_url as string | undefined;
       }
       return token;
+    },
+
+    async session({ session, token }) {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.id, // Database ID (string)
+          github_id: token.github_id, // GitHub ID (number)
+          name: token.name,
+          email: token.email,
+          bio: token.bio,
+          avatar_url: token.avatar_url,
+          username: token.username,
+        },
+      };
     },
   },
 

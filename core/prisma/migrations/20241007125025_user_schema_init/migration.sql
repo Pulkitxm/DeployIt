@@ -3,6 +3,7 @@ CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "github_id" INTEGER NOT NULL,
     "name" TEXT DEFAULT '',
+    "github_username" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "bio" TEXT,
     "avatar" TEXT NOT NULL,

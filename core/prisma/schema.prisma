@@ -8,13 +8,14 @@ datasource db {
 }
 
 model User {
-  id           String  @id @default(cuid())
-  github_id    Int  @unique
-  name         String? @default("")
-  email        String  @unique
-  bio          String?
-  avatar       String
-  access_token String
+  id              String  @id @default(cuid())
+  github_id       Int     @unique
+  name            String? @default("")
+  github_username String
+  email           String  @unique
+  bio             String?
+  avatar          String
+  access_token    String
 }
 
 model Session {

@@ -27,42 +27,42 @@ export const buildAndCLone = async () => {
       },
     );
 
-    await executeProcess(
-      async function () {
-        await runCommand({
-          command: "npm install",
-          cwd: workDir,
-        });
-      },
-      {
-        initialLog: "Installing dependencies",
-        finalLog: `Successfully installed dependencies`,
-      },
-    );
+    // await executeProcess(
+    //   async function () {
+    //     await runCommand({
+    //       command: "npm install",
+    //       cwd: workDir,
+    //     });
+    //   },
+    //   {
+    //     initialLog: "Installing dependencies",
+    //     finalLog: `Successfully installed dependencies`,
+    //   },
+    // );
 
-    console.log("Building the project", BUILD_COMMAND);
+    // console.log("Building the project", BUILD_COMMAND);
 
-    await executeProcess(
-      async function () {
-        await runCommand({
-          command: BUILD_COMMAND,
-          cwd: workDir,
-        });
-      },
-      {
-        initialLog: "Building the project",
-        finalLog: `Successfully cloned, installed dependencies, and built the project`,
-      },
-    );
+    // await executeProcess(
+    //   async function () {
+    //     await runCommand({
+    //       command: BUILD_COMMAND,
+    //       cwd: workDir,
+    //     });
+    //   },
+    //   {
+    //     initialLog: "Building the project",
+    //     finalLog: `Successfully cloned, installed dependencies, and built the project`,
+    //   },
+    // );
 
-    console.log(`${workDir}/${BUILD_FOLDER}/* ${buildDir}`);
+    // console.log(`${workDir}/${BUILD_FOLDER}/* ${buildDir}`);
 
-    await executeProcess(async function () {
-      await runCommand({
-        command: `mv '${workDir}/${BUILD_FOLDER}/'* '${buildDir}'`,
-        cwd: workDir,
-      });
-    }, {});
+    // await executeProcess(async function () {
+    //   await runCommand({
+    //     command: `mv '${workDir}/${BUILD_FOLDER}/'* '${buildDir}'`,
+    //     cwd: workDir,
+    //   });
+    // }, {});
   } catch (err: Error | any) {
     console.error(`Failed to complete the process: ${err.message}`);
     process.exit(1);

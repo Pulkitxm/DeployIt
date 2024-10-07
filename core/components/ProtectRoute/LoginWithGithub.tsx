@@ -1,7 +1,7 @@
 "use client";
 
 import { signIn } from "next-auth/react";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { GithubIcon } from "lucide-react";
 
 export default function LoginWithGithub() {
