@@ -24,11 +24,11 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-background shadow-sm fixed top-0 left-0 right-0 z-50 border-b border-gray-400">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
+    <nav className="fixed left-0 right-0 top-0 z-50 border-b border-gray-400 bg-background shadow-sm">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 justify-between">
           <div className="flex items-center">
-            <Link href="/" className="flex-shrink-0 flex items-center">
+            <Link href="/" className="flex flex-shrink-0 items-center">
               <svg
                 className="h-8 w-8 text-primary"
                 fill="none"
@@ -51,7 +51,7 @@ export default function Navbar() {
             {items.map((item, index) => (
               <Link
                 href={item.href}
-                className="px-3 py-2 rounded-md text-sm font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
+                className="rounded-md px-3 py-2 text-sm font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
                 key={index}
               >
                 {item.name}
@@ -66,7 +66,7 @@ export default function Navbar() {
             <ThemeToggle />
             <button
               onClick={toggleMenu}
-              className="inline-flex items-center justify-center p-2 ml-2 rounded-md text-foreground hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
+              className="ml-2 inline-flex items-center justify-center rounded-md p-2 text-foreground hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
             >
               <span className="sr-only">Open main menu</span>
               {isMenuOpen ? (
@@ -80,12 +80,12 @@ export default function Navbar() {
       </div>
       {isMenuOpen && (
         <div className="sm:hidden">
-          <div className="px-2 pt-2 pb-3 space-y-1">
+          <div className="space-y-1 px-2 pb-3 pt-2">
             {items.map((item, index) => (
               <Link
                 href={item.href}
                 key={index}
-                className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
+                className="block rounded-md px-3 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
               >
                 {item.name}
               </Link>

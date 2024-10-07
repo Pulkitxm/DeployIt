@@ -19,7 +19,7 @@ const logout = () => {
 export default function AuthButtons() {
   const { data: session } = useSession();
   return (
-    <div className="flex frr">
+    <div className="frr flex">
       {session ? (
         <div>
           <UserDetails session={session} logout={logout} />

@@ -1,0 +1,23 @@
+{
+  "name": "docker-builder",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsc -b && node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "build": "tsc -b",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,md,mdx,css,yaml,yml}\"",
+    "check": "prettier --check \"**/*.{ts,tsx,js,jsx,md,mdx,css,yaml,yml}\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@types/node": "^22.7.4",
+    "dotenv": "^16.4.5",
+    "prettier": "^3.3.3",
+    "simple-git": "^3.27.0",
+    "ts-node": "^10.9.2"
+  }
+}

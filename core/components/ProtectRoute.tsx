@@ -17,7 +17,7 @@ export default async function ProtectRoute() {
 
   if (!session) {
     return (
-      <div className="w-full h-full flex items-center justify-center text-white">
+      <div className="flex h-full w-full items-center justify-center text-white">
         <Card className="w-[350px]">
           <CardHeader>
             <CardTitle>Unauthorized Access</CardTitle>

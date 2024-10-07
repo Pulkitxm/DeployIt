@@ -16,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="w-screen h-screen overflow-auto">
+      <body className="h-screen w-screen overflow-auto">
         <AppWrapper>
           <Navbar />
           {children}

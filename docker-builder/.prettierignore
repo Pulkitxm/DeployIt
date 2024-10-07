@@ -1,0 +1,38 @@
+# Ignore node_modules
+node_modules
+
+# Ignore build output
+dist
+build
+
+# Ignore coverage reports
+coverage
+
+# Ignore environment files
+.env
+.env.local
+.env.*.local
+
+# Ignore log files
+*.log
+
+# Ignore TypeScript declaration files
+*.d.ts
+
+# Ignore temporary files
+tmp
+temp
+
+# Ignore IDE and editor config files
+.vscode
+.idea
+*.sublime-workspace
+*.sublime-project
+
+# Ignore all test files
+**/*.spec.ts
+**/*.test.ts
+
+# Ignore other non-source files
+*.tsbuildinfo
+output/

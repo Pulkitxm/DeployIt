@@ -11,10 +11,10 @@ export default function LoginWithGithub() {
 
   return (
     <Button
-      className="w-full bg-[#24292e] hover:bg-[#2f363d] text-white"
+      className="w-full bg-[#24292e] text-white hover:bg-[#2f363d]"
       onClick={onSignin}
     >
-      <GithubIcon className="w-4 h-4 mr-2" />
+      <GithubIcon className="mr-2 h-4 w-4" />
       Login with GitHub
     </Button>
   );

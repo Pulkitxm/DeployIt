@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-cd core && npx tsc -b && npm run format && npm run build
+cd core && npm run format && npx tsc -b && npm run build
+cd ../docker-builder npm run format && npm run build
