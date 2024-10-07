@@ -14,7 +14,7 @@ export default function LoginWithGithub() {
       className="w-full bg-[#24292e] hover:bg-[#2f363d] text-white"
       onClick={onSignin}
     >
-        <GithubIcon className="w-4 h-4 mr-2" />
+      <GithubIcon className="w-4 h-4 mr-2" />
       Login with GitHub
     </Button>
   );

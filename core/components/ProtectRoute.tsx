@@ -13,8 +13,8 @@ import { authOptions } from "@/lib/options";
 
 export default async function ProtectRoute() {
   const session = await getServerSession(authOptions);
-  console.log("session",session);
-  
+  console.log("session", session);
+
   if (!session) {
     return (
       <div className="w-full h-full flex items-center justify-center text-white">
