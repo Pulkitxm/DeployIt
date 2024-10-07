@@ -10,9 +10,14 @@ import {
 import { Session } from "next-auth";
 import Image from "next/image";
 import { LogOut } from "lucide-react";
-import { signOut } from "next-auth/react";
 
-export default function UserDetails({ session }: { session: Session }) {
+export default function UserDetails({
+  session,
+  logout,
+}: {
+  session: Session;
+  logout: () => void;
+}) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -27,7 +32,7 @@ export default function UserDetails({ session }: { session: Session }) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => signOut()}>
+        <DropdownMenuItem onClick={logout}>
           <LogOut className="mr-2 h-4 w-4" />
           <span>Logout</span>
         </DropdownMenuItem>

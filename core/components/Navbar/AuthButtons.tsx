@@ -1,8 +1,20 @@
 import React from "react";
 import { Button } from "../ui/button";
 import { signIn, signOut, useSession } from "next-auth/react";
-import Image from "next/image";
 import UserDetails from "./UserDetails";
+import { REDIRECT_SIGN_IN_PATH, REDIRECT_SIGN_OUT_PATH } from "@/lib/config";
+
+const login = () => {
+  signIn("github", {
+    callbackUrl: REDIRECT_SIGN_IN_PATH || "/dashboard",
+  });
+};
+
+const logout = () => {
+  signOut({
+    callbackUrl: REDIRECT_SIGN_OUT_PATH || "/",
+  });
+};
 
 export default function AuthButtons() {
   const { data: session } = useSession();
@@ -10,11 +22,11 @@ export default function AuthButtons() {
     <div className="flex frr">
       {session ? (
         <div>
-          <UserDetails session={session} />
+          <UserDetails session={session} logout={logout} />
         </div>
       ) : (
         <>
-          <Button size="sm" onClick={() => signIn("github")}>
+          <Button size="sm" onClick={login}>
             Log in
           </Button>
         </>
@@ -28,20 +40,13 @@ export function AuthButtonsSm() {
   return (
     <>
       {session ? (
-        <Button
-          className="w-full justify-center"
-          size="sm"
-          onClick={() => signOut()}
-        >
+        <Button className="w-full justify-center" size="sm" onClick={logout}>
           Sign out
         </Button>
       ) : (
         <>
-          <Button variant="ghost" className="w-full justify-center" size="sm" onClick={() => signIn("github")}>
+          <Button className="w-full justify-center" size="sm" onClick={login}>
             Log in
-          </Button>
-          <Button className="w-full justify-center" size="sm" onClick={() => signIn("github")}>
-            Sign up
           </Button>
         </>
       )}

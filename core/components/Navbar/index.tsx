@@ -6,6 +6,17 @@ import { Menu, X } from "lucide-react";
 import ThemeToggle from "@/components/Navbar/ThemeToggle";
 import AuthButtons, { AuthButtonsSm } from "./AuthButtons";
 
+const items = [
+  {
+    name: "Home",
+    href: "/",
+  },
+  {
+    name: "Dashboard",
+    href: "/dashboard",
+  },
+];
+
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => {
@@ -13,7 +24,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-background shadow-sm fixed top-0 left-0 right-0 z-50 border-b border-border">
+    <nav className="bg-background shadow-sm fixed top-0 left-0 right-0 z-50 border-b border-gray-400">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
@@ -37,30 +48,15 @@ export default function Navbar() {
             </Link>
           </div>
           <div className="hidden sm:flex sm:items-center sm:space-x-4">
-            <Link
-              href="/"
-              className="px-3 py-2 rounded-md text-sm font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
-            >
-              Home
-            </Link>
-            <Link
-              href="/features"
-              className="px-3 py-2 rounded-md text-sm font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
-            >
-              Features
-            </Link>
-            <Link
-              href="/pricing"
-              className="px-3 py-2 rounded-md text-sm font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
-            >
-              Pricing
-            </Link>
-            <Link
-              href="/docs"
-              className="px-3 py-2 rounded-md text-sm font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
-            >
-              Docs
-            </Link>
+            {items.map((item, index) => (
+              <Link
+                href={item.href}
+                className="px-3 py-2 rounded-md text-sm font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
+                key={index}
+              >
+                {item.name}
+              </Link>
+            ))}
           </div>
           <div className="hidden sm:flex sm:items-center sm:space-x-2">
             <ThemeToggle />
@@ -85,30 +81,15 @@ export default function Navbar() {
       {isMenuOpen && (
         <div className="sm:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1">
-            <Link
-              href="/"
-              className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
-            >
-              Home
-            </Link>
-            <Link
-              href="/features"
-              className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
-            >
-              Features
-            </Link>
-            <Link
-              href="/pricing"
-              className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
-            >
-              Pricing
-            </Link>
-            <Link
-              href="/docs"
-              className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
-            >
-              Docs
-            </Link>
+            {items.map((item, index) => (
+              <Link
+                href={item.href}
+                key={index}
+                className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
+              >
+                {item.name}
+              </Link>
+            ))}
             <div className="mt-4 space-y-2">
               <AuthButtonsSm />
             </div>
