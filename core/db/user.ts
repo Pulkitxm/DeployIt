@@ -1,3 +1,5 @@
+"use server";
+
 import { prisma } from "../db";
 
 export async function getAccessToken(github_id: number) {

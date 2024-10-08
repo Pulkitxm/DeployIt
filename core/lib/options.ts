@@ -64,20 +64,19 @@ export const authOptions: NextAuthOptions = {
         },
       });
 
-      // Assign the database-generated ID and GitHub ID to the user object
-      user.id = upsertedUser.id; // Database ID (string)
-      user.github_id = upsertedUser.github_id; // GitHub ID (number)
+      user.id = upsertedUser.id;
+      user.github_id = upsertedUser.github_id;
 
       return true;
     },
 
     async jwt({ token, user, profile }) {
       if (user) {
-        token.id = user.id; // Database ID (string)
-        token.github_id = user.github_id; // GitHub ID (number)
+        token.id = user.id;
+        token.github_id = user.github_id;
         token.name = user.name;
         token.email = user.email;
-        token.username = (profile?.login as string) ?? "";
+        token.username = ((profile?.login as string) ?? "").toLowerCase();
       }
       if (profile) {
         token.bio = profile.bio as string | undefined;
@@ -91,8 +90,8 @@ export const authOptions: NextAuthOptions = {
         ...session,
         user: {
           ...session.user,
-          id: token.id, // Database ID (string)
-          github_id: token.github_id, // GitHub ID (number)
+          id: token.id,
+          github_id: token.github_id,
           name: token.name,
           email: token.email,
           bio: token.bio,
