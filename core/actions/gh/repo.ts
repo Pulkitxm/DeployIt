@@ -5,7 +5,7 @@ import { getAccessToken } from "@/db/user";
 import { FileItemType } from "@/types/project";
 import { Octokit } from "@octokit/rest";
 
-export async function getRepoDetails({
+export async function getRepoBranches({
   repoName,
   repoOwner,
   githubId,
@@ -21,9 +21,7 @@ export async function getRepoDetails({
   try {
     const branches = await detectBranch(access_token, repoOwner, repoName);
 
-    return {
-      branches,
-    };
+    return branches;
   } catch (error) {
     console.error("Error fetching repo details:", error);
     return null;
@@ -37,12 +35,14 @@ async function detectBranch(
 ) {
   const octokit = new Octokit({ auth: access_token });
   try {
-    const { data: branches } = await octokit.repos.listBranches({
+    const { data } = await octokit.repos.listBranches({
       owner: repoOwner,
       repo: repoName,
     });
 
-    return branches.map((branch) => branch.name);
+    const branches = data.map((branch ) => branch.name);
+    console.log(branches)
+    return branches;
   } catch (error) {
     console.error("Error fetching repo details:", error);
     return [];

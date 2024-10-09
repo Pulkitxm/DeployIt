@@ -1,17 +1,14 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import Link from "next/link";
-import { getRepoDetails } from "@/actions/gh/repo";
-import { useSession } from "next-auth/react";
 import ImportProject from "@/components/ImportProject";
 import { ImportProjectType } from "@/types/project";
 
 export default function Import() {
-  const { data: session } = useSession();
   const searchParams = useSearchParams();
   const repoUrl = searchParams.get("repo_url") || "";
   const repoOwner = searchParams.get("repo_owner") || "";
@@ -23,6 +20,7 @@ export default function Import() {
       repoName,
       repoOwner,
       repoUrl,
+      branch: "main",
       rootDir: "/",
       build: {
         open: false,
@@ -35,18 +33,6 @@ export default function Import() {
       },
     },
   );
-
-  const fetchRepoDetails = useCallback(async () => {
-    const githubId = session?.user.github_id;
-    if (!githubId) return;
-    const repoDteials = await getRepoDetails({ githubId, repoOwner, repoName });
-    console.log(repoDteials);
-  }, [repoName, repoOwner, session?.user.github_id]);
-
-  useEffect(() => {
-    if (!repoUrl || !repoOwner || !repoName) return;
-    fetchRepoDetails();
-  }, [fetchRepoDetails, repoName, repoOwner, repoUrl]);
 
   if (!repoUrl || !repoOwner || !repoName) {
     return (

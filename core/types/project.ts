@@ -4,6 +4,7 @@ export type ImportProjectType = {
   repoOwner: string;
   repoUrl: string;
   rootDir: string;
+  branch: string;
   build: {
     open: boolean;
     buildCommand: string;

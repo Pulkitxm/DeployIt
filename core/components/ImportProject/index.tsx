@@ -3,18 +3,12 @@
 import { Github } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import Link from "next/link";
 import { ImportProjectType } from "@/types/project";
 import ChooseDir from "./ChooseDir";
 import BuilAndOutput from "./BuilAndOutput";
 import EnvironmentVariable from "./EnvironmentVariable";
+import ChooseBranch from "./ChooseBranch";
 
 export default function ImportProject({
   importProjectData,
@@ -59,13 +53,7 @@ export default function ImportProject({
                 {importProjectData.repoOwner}/{importProjectData.repoName}
               </span>
             </Link>
-            <div className="mb-4 text-sm text-muted-foreground">main</div>
-            <Button variant="link" className="p-0 hover:underline">
-              Import a different Git Repository →
-            </Button>
-            <Button variant="link" className="p-0 hover:underline">
-              Browse Templates →
-            </Button>
+            <div className="mb-4 text-sm text-muted-foreground">{importProjectData.branch}</div>
           </div>
           <div className="w-full lg:w-2/3">
             <div className="rounded-lg bg-card p-6 text-card-foreground">
@@ -77,19 +65,10 @@ export default function ImportProject({
                   </label>
                   <Input defaultValue="test" />
                 </div>
-                <div>
-                  <label className="mb-1 block text-sm font-medium text-muted-foreground">
-                    Framework Preset
-                  </label>
-                  <Select defaultValue="other">
-                    <SelectTrigger className="w-full">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="other">Other</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+                <ChooseBranch
+                  importProjectData={importProjectData}
+                  setImportProjectData={setImportProjectData}
+                />
                 <div>
                   <label className="mb-1 block text-sm font-medium text-muted-foreground">
                     Root Directory
