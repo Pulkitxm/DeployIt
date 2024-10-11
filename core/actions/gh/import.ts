@@ -4,8 +4,8 @@ import { ImportProjectType } from "@/types/project";
 import { prisma } from "@/db";
 import { getServerSession } from "next-auth";
 import { generateSlug } from "@/lib/project";
-// import redis from "@/lib/redis";
-// import { getAccessTokenByEmail } from "@/db/user";
+import redis from "@/lib/redis";
+import { getAccessTokenByEmail } from "@/db/user";
 
 export async function importProject(importProject: ImportProjectType) {
   const session = await getServerSession();
@@ -16,22 +16,22 @@ export async function importProject(importProject: ImportProjectType) {
     };
   }
 
-  // const accessToken = await getAccessTokenByEmail(session.user.email);
+  const accessToken = await getAccessTokenByEmail(session.user.email);
 
-  // if (redis) {
-  //   console.log({
-  //     ...importProject,
-  //     GITHUB_TOKEN: accessToken,
-  //   });
-  //   const res = await redis.lpush(
-  //     "project_import_queue",
-  //     JSON.stringify({
-  //       ...importProject,
-  //       GITHUB_TOKEN: accessToken,
-  //     }),
-  //   );
-  //   console.log(res);
-  // }
+  if (redis) {
+    console.log({
+      ...importProject,
+      GITHUB_TOKEN: accessToken,
+    });
+    const res = await redis.lpush(
+      "project_import_queue",
+      JSON.stringify({
+        ...importProject,
+        GITHUB_TOKEN: accessToken,
+      }),
+    );
+    console.log(res);
+  }
 
   const user = await prisma.user.findUnique({
     where: {

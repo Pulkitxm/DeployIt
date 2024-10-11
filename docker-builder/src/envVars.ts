@@ -33,18 +33,3 @@ export const logFile = exportProjectDir;
     fs.mkdirSync(dir);
   }
 });
-
-console.log({
-  GITHUB_TOKEN,
-  REPO_OWNER,
-  REPO_NAME,
-  ROOT_DIR,
-  BUILD_FOLDER,
-  BUILD_COMMAND,
-  BRANCH,
-  PROJECT_EXPORT_DIR,
-  projectDir,
-  workDir,
-  exportProjectDir,
-  logFile,
-})
