@@ -41,6 +41,7 @@ export default function ChooseDir({
           path: "",
           repoName: importProjectData.repoName,
           repoOwner: importProjectData.repoOwner,
+          branchName: importProjectData.branch,
         });
         setFileStructure(rootContent);
       } catch (error) {
@@ -50,7 +51,12 @@ export default function ChooseDir({
       }
     };
     loadInitialFileStructure();
-  }, [importProjectData.repoName, importProjectData.repoOwner, session]);
+  }, [
+    importProjectData.repoName,
+    importProjectData.repoOwner,
+    importProjectData.branch,
+    session,
+  ]);
 
   const handleExpand = async (path: string) => {
     try {
@@ -59,6 +65,7 @@ export default function ChooseDir({
         path,
         repoName: importProjectData.repoName,
         repoOwner: importProjectData.repoOwner,
+        branchName: importProjectData.branch,
       });
       setFileStructure((prevStructure) =>
         prevStructure.map((file) =>
@@ -104,6 +111,21 @@ export default function ChooseDir({
           )}
         </div>
         <DialogFooter>
+          <DialogClose asChild>
+            <Button
+              type="button"
+              onClick={() => {
+                setImportProjectData((prev) => ({
+                  ...prev,
+                  rootDir: "/",
+                }));
+                setSelectedPath("/");
+              }}
+              variant={"ghost"}
+            >
+              Reset
+            </Button>
+          </DialogClose>
           <DialogClose asChild>
             <Button
               type="button"

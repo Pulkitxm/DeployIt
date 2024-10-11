@@ -10,7 +10,6 @@ import { ImportProjectType } from "@/types/project";
 
 export default function Import() {
   const searchParams = useSearchParams();
-  const repoUrl = searchParams.get("repo_url") || "";
   const repoOwner = searchParams.get("repo_owner") || "";
   const repoName = searchParams.get("repo_name") || "";
 
@@ -19,7 +18,6 @@ export default function Import() {
       projectName: repoName,
       repoName,
       repoOwner,
-      repoUrl,
       branch: "main",
       rootDir: "/",
       build: {
@@ -29,12 +27,13 @@ export default function Import() {
       },
       env: {
         open: false,
-        values: [{ key: "", value: "" }],
+        values: [],
       },
+      repoUrl: "",
     },
   );
 
-  if (!repoUrl || !repoOwner || !repoName) {
+  if (!repoOwner || !repoName) {
     return (
       <div className="flex h-screen flex-col items-center justify-center bg-background text-foreground">
         <Alert variant="destructive" className="max-w-[300px]">

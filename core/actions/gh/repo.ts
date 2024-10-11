@@ -40,8 +40,7 @@ async function detectBranch(
       repo: repoName,
     });
 
-    const branches = data.map((branch ) => branch.name);
-    console.log(branches)
+    const branches = data.map((branch) => branch.name);
     return branches;
   } catch (error) {
     console.error("Error fetching repo details:", error);
@@ -54,11 +53,13 @@ export const fetchRepoDirs = async ({
   path,
   repoName,
   repoOwner,
+  branchName,
 }: {
   github_id: number;
   path: string;
   repoName: string;
   repoOwner: string;
+  branchName: string;
 }): Promise<FileItemType[]> => {
   try {
     const access_token = await getAccessToken(github_id);
@@ -69,6 +70,7 @@ export const fetchRepoDirs = async ({
       owner: repoOwner,
       repo: repoName,
       path,
+      ref: branchName,
     });
     if (Array.isArray(response.data)) {
       return response.data

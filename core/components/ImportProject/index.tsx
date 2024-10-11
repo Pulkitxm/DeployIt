@@ -9,6 +9,7 @@ import ChooseDir from "./ChooseDir";
 import BuilAndOutput from "./BuilAndOutput";
 import EnvironmentVariable from "./EnvironmentVariable";
 import ChooseBranch from "./ChooseBranch";
+import { importProject } from "@/actions/gh/import";
 
 export default function ImportProject({
   importProjectData,
@@ -18,6 +19,7 @@ export default function ImportProject({
   setImportProjectData: React.Dispatch<React.SetStateAction<ImportProjectType>>;
 }) {
   async function handleImportProject() {
+    importProject(importProjectData);
     console.log(importProjectData);
   }
 
@@ -44,7 +46,7 @@ export default function ImportProject({
               GIT REPOSITORY
             </div>
             <Link
-              href={importProjectData.repoUrl}
+              href={`https://github.com/${importProjectData.repoOwner}/${importProjectData.repoName}`.toLowerCase()}
               target="_blank"
               className="group mb-1 flex items-center"
             >
@@ -53,7 +55,9 @@ export default function ImportProject({
                 {importProjectData.repoOwner}/{importProjectData.repoName}
               </span>
             </Link>
-            <div className="mb-4 text-sm text-muted-foreground">{importProjectData.branch}</div>
+            <div className="mb-4 text-sm text-muted-foreground">
+              {importProjectData.branch}
+            </div>
           </div>
           <div className="w-full lg:w-2/3">
             <div className="rounded-lg bg-card p-6 text-card-foreground">
@@ -63,7 +67,15 @@ export default function ImportProject({
                   <label className="mb-1 block text-sm font-medium text-muted-foreground">
                     Project Name
                   </label>
-                  <Input defaultValue="test" />
+                  <Input
+                    value={importProjectData.projectName}
+                    onChange={(e) =>
+                      setImportProjectData((prev) => ({
+                        ...prev,
+                        projectName: e.target.value,
+                      }))
+                    }
+                  />
                 </div>
                 <ChooseBranch
                   importProjectData={importProjectData}

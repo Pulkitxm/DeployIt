@@ -61,6 +61,7 @@ shell:
 
 copy:
 	@echo "Copying build artifacts to $(DESTINATION_DIR)..."
+	rm -rf $(DESTINATION_DIR)
 	docker cp $(CONTAINER_NAME):'/app/$(BUILD_FOLDER)' '$(DESTINATION_DIR)'
 	@echo ""
 

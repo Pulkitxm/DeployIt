@@ -2,13 +2,11 @@ import React, { useState } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { FileItemType } from "@/types/project";
 import { Button } from "@/components/ui/button";
-import { useTheme } from "next-themes";
 
 interface FileItemProps {
   file: FileItemType;
   onExpand: (path: string) => Promise<void>;
   onSelect: (path: string) => void;
-  isSelected: boolean;
   selectedPath: string;
 }
 
@@ -16,11 +14,9 @@ export const FileItem: React.FC<FileItemProps> = ({
   file,
   onExpand,
   onSelect,
-  isSelected,
   selectedPath,
 }) => {
   const [isExpanded, setIsExpanded] = useState(file.isExpanded || false);
-  const { theme } = useTheme();
 
   const handleExpand = async () => {
     if (file.type === "dir") {
@@ -33,9 +29,7 @@ export const FileItem: React.FC<FileItemProps> = ({
 
   return (
     <li className="ml-4">
-      <div
-        className={`flex items-center space-x-2 ${isSelected ? (theme === "light" ? "bg-gray-200" : "bg-gray-800") : ""}`}
-      >
+      <div className="flex items-center space-x-2">
         {file.type === "dir" ? (
           <>
             <Button
@@ -75,7 +69,6 @@ export const FileItem: React.FC<FileItemProps> = ({
               file={child}
               onExpand={onExpand}
               onSelect={onSelect}
-              isSelected={isSelected}
               selectedPath={selectedPath}
             />
           ))}

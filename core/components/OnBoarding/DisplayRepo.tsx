@@ -38,7 +38,6 @@ export default function DisplayRepo({ repo }: { repo: Repo }) {
         href={{
           pathname: `/import`,
           query: {
-            repo_url: `https://github.com/${repo.owner}/${repo.name}`,
             repo_owner: repo.owner,
             repo_name: repo.name,
           },

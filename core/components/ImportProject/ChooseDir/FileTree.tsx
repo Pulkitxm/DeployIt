@@ -23,7 +23,6 @@ export const FileTree: React.FC<FileTreeProps> = ({
             file={file}
             onExpand={onExpand}
             onSelect={onSelect}
-            isSelected={file.path === selectedPath}
             selectedPath={selectedPath}
           />
         </React.Fragment>

@@ -1,7 +1,8 @@
 import {
+  BRANCH,
   BUILD_COMMAND,
   BUILD_FOLDER,
-  buildDir,
+  exportProjectDir,
   GITHUB_TOKEN,
   REPO_URL,
   repoUrlFromSecret,
@@ -15,11 +16,11 @@ export const buildAndCLone = async () => {
   try {
     await executeProcess(
       async function () {
-        if (!REPO_URL || !GITHUB_TOKEN) {
+        if (!REPO_URL || !GITHUB_TOKEN || !BRANCH) {
           console.error("Error: Missing environment variables.");
           return process.exit(1);
         }
-        await cloneRepo(repoUrlFromSecret);
+        await cloneRepo(repoUrlFromSecret, BRANCH);
       },
       {
         initialLog: "Cloning repository from Github",
@@ -40,10 +41,13 @@ export const buildAndCLone = async () => {
       },
     );
 
-    console.log("Building the project", BUILD_COMMAND);
-
     await executeProcess(
       async function () {
+        if (!BUILD_COMMAND) {
+          console.error("Error: Missing BUILD_COMMAND");
+          process.exit(1);
+        }
+        console.log("Building the project", BUILD_COMMAND);
         await runCommand({
           command: BUILD_COMMAND,
           cwd: workDir,
@@ -55,13 +59,14 @@ export const buildAndCLone = async () => {
       },
     );
 
-    console.log(`${workDir}/${BUILD_FOLDER}/* ${buildDir}`);
+    console.log("Successfully built the project");
 
     await executeProcess(async function () {
       await runCommand({
-        command: `mv '${workDir}/${BUILD_FOLDER}/'* '${buildDir}'`,
+        command: `mv '${workDir}/${BUILD_FOLDER}/'* '${exportProjectDir}'`,
         cwd: workDir,
       });
+      console.log(exportProjectDir);
     }, {});
   } catch (err: Error | any) {
     console.error(`Failed to complete the process: ${err.message}`);

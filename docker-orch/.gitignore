@@ -1,0 +1,5 @@
+output*/
+tsconfig.tsbuildinfo
+node_modules/
+.env
+dist/

@@ -13,6 +13,7 @@ export const authOptions: NextAuthOptions = {
       authorization: {
         params: {
           scope: "read:user repo user:email",
+          prompt: "consent",
         },
       },
     }),

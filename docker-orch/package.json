@@ -1,0 +1,24 @@
+{
+    "devDependencies": {
+        "@types/dockerode": "^3.3.31",
+        "husky": "^8.0.0"
+    },
+    "scripts": {
+        "start": "tsc -b && node dist/index.js",
+        "dev": "nodemon src/index.ts",
+        "build": "tsc -b",
+        "format": "prettier --write \"**/*.{ts,tsx,js,jsx,md,mdx,css,yaml,yml}\"",
+        "check": "prettier --check \"**/*.{ts,tsx,js,jsx,md,mdx,css,yaml,yml}\"",
+        "prepare": "husky install"
+    },
+    "dependencies": {
+        "@octokit/rest": "^21.0.2",
+        "@types/node": "^22.7.5",
+        "axios": "^1.7.7",
+        "dockerode": "^4.0.2",
+        "dotenv": "^16.4.5",
+        "ioredis": "^5.4.1",
+        "typescript": "^5.6.3",
+        "zod": "^3.23.8"
+    }
+}

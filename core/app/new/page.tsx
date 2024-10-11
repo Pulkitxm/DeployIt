@@ -35,12 +35,14 @@ export default function New() {
   if (protectRoute) return protectRoute;
 
   return (
-    <Onboarding
-      repos={repos}
-      loading={loading}
-      fetchRepos={fetchRepos}
-      query={query}
-      setQuery={setQuery}
-    />
+    <div className="flex h-screen w-screen items-center justify-center">
+      <Onboarding
+        repos={repos}
+        loading={loading}
+        fetchRepos={fetchRepos}
+        query={query}
+        setQuery={setQuery}
+      />
+    </div>
   );
 }

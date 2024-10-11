@@ -5,7 +5,7 @@ import { projectDir } from "../envVars";
 
 const git = simpleGit();
 
-export async function cloneRepo(repoUrl: string) {
+export async function cloneRepo(repoUrl: string, branch: string) {
   if (fs.existsSync(projectDir)) {
     fs.rmSync(projectDir, { recursive: true });
   } else {
@@ -13,4 +13,7 @@ export async function cloneRepo(repoUrl: string) {
   }
 
   await git.clone(repoUrl, projectDir);
+
+  await git.cwd(projectDir);
+  await git.checkout(branch);
 }

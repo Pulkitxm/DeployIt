@@ -26,3 +26,12 @@ export type FileItemType = {
   children?: FileItemType[];
   isExpanded?: boolean;
 };
+
+export enum SORT_ORDER {
+  most_recent = "most_recent",
+  least_recent = "least_recent",
+}
+export enum VIEW_MODE {
+  grid = "grid",
+  list = "list",
+}
