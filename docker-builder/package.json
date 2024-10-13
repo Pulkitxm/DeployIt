@@ -14,10 +14,18 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.670.0",
     "@types/node": "^22.7.4",
     "dotenv": "^16.4.5",
+    "gitignore-parser": "^0.0.2",
+    "ignore": "^6.0.2",
+    "mime-types": "^2.1.35",
     "prettier": "^3.3.3",
     "simple-git": "^3.27.0",
     "ts-node": "^10.9.2"
+  },
+  "devDependencies": {
+    "@types/gitignore-parser": "^0.0.3",
+    "@types/mime-types": "^2.1.4"
   }
 }

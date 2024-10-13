@@ -17,6 +17,7 @@ export async function importProject(importProject: ImportProjectType) {
   }
 
   const accessToken = await getAccessTokenByEmail(session.user.email);
+  const slug = generateSlug();
 
   if (redis) {
     console.log({
@@ -28,6 +29,7 @@ export async function importProject(importProject: ImportProjectType) {
       JSON.stringify({
         ...importProject,
         GITHUB_TOKEN: accessToken,
+        projectSlug: slug,
       }),
     );
     console.log(res);
@@ -58,7 +60,7 @@ export async function importProject(importProject: ImportProjectType) {
       branch: importProject.branch,
       buildCommand: importProject.build.buildCommand,
       installCommand: importProject.build.installCommand,
-      slug: generateSlug(),
+      slug: slug,
       createdAt: new Date(),
       updatedAt: new Date(),
     },

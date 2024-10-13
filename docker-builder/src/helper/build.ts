@@ -11,6 +11,7 @@ import {
 import { runCommand } from "../helper/shell";
 import { cloneRepo } from "./git";
 import { executeProcess } from "./process";
+import { uploadBuildDirContents } from "./upload";
 
 export const buildAndCLone = async () => {
   try {
@@ -68,6 +69,10 @@ export const buildAndCLone = async () => {
       });
       console.log(exportProjectDir);
     }, {});
+
+    await uploadBuildDirContents(exportProjectDir);
+    console.log("Successfully uploaded the build contents");
+        
   } catch (err: Error | any) {
     console.error(`Failed to complete the process: ${err.message}`);
     process.exit(1);

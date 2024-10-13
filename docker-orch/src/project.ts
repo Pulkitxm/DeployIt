@@ -22,6 +22,7 @@ export const validateImportProject = z.object({
     ),
   }),
   GITHUB_TOKEN: z.string(),
+  projectSlug: z.string(),
 });
 
 export type ImportProject = z.infer<typeof validateImportProject>;

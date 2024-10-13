@@ -3,7 +3,7 @@ CONTAINER_NAME=test-vercel-builder
 DOCKERFILE_PATH=Dockerfile
 ENV_FILE=.env
 DESTINATION_DIR=output
-BUILD_FOLDER=build
+EXPORTS_FOLDER=export
 
 help:
 	@echo "Makefile commands:"
@@ -44,9 +44,9 @@ reset:
 	-docker rmi $(IMAGE_NAME)
 	@echo ""
 
-clean: stop
-	@echo "Removing Docker image..."
-	rm -rf build dist project DESTINATION_DIR
+clean:
+	@echo "Removing ALL Folers..."
+	rm -rf $(DESTINATION_DIR)
 	@echo ""
 
 logs:
@@ -62,7 +62,7 @@ shell:
 copy:
 	@echo "Copying build artifacts to $(DESTINATION_DIR)..."
 	rm -rf $(DESTINATION_DIR)
-	docker cp $(CONTAINER_NAME):'/app/$(BUILD_FOLDER)' '$(DESTINATION_DIR)'
+	docker cp $(CONTAINER_NAME):'/app/$(EXPORTS_FOLDER)' '$(DESTINATION_DIR)'
 	@echo ""
 
 serve:
