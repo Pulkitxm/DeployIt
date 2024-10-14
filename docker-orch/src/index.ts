@@ -1,11 +1,10 @@
-import { dokcerImage } from "./envVars";
+import { createSecretKey } from "crypto";
+import { addLogs } from "./db";
+import { AWS_ACCESS_KEY_ID, AWS_REGION, AWS_SECRET_ACCESS_KEY, dokcerImage } from "./envVars";
 import { ImportProject, validateImportProject } from "./project";
 import redis from "./redis";
 import Docker from "dockerode";
-import fs from "fs";
 import { v4 as uuid } from "uuid";
-
-const logFilePath = "./test/log.log";
 
 const loopHandler = async () => {
   if (!redis) return;
@@ -35,22 +34,13 @@ const loopHandler = async () => {
 
 const handleProjectImportViaDocker = async (importProject: ImportProject) => {
   const docker = new Docker({});
-  try {
-    await docker.getContainer("devpulkit").remove({ force: true });
-    console.log("Previous container 'devpulkit' removed successfully.");
-  } catch (err: any) {
-    console.warn(
-      "No existing container to remove or failed removal:",
-      err.message,
-    );
-  }
 
   const options: Docker.ContainerCreateOptions = {
     Image: dokcerImage,
     name: "test-vercel-builder",
     Env: generateEnvConfig(importProject),
     HostConfig: {
-      AutoRemove: false,
+      AutoRemove: true,
       NetworkMode: "host",
     },
   };
@@ -60,11 +50,7 @@ const handleProjectImportViaDocker = async (importProject: ImportProject) => {
   try {
     const container = await docker.createContainer(options);
     await container.start();
-    printLiveLogs(container);
-    await container.wait();
-
-    const logs = await container.logs({ stdout: true, stderr: true });
-    console.log("Container logs:", logs.toString());
+    printLiveLogs(container, importProject.dbId);
   } catch (error) {
     console.error("Error creating or starting container:", error);
   }
@@ -72,8 +58,11 @@ const handleProjectImportViaDocker = async (importProject: ImportProject) => {
 
 const generateEnvConfig = (importProject: ImportProject): string[] => {
   const envVars = [
-    { name: "PROJECT_EXPORT_DIR", value: "deployit-exports"+uuid() },
+    { name: "PROJECT_EXPORT_DIR", value: "deployit-exports" + uuid() },
     { name: "BREAK_COUNT", value: 150 },
+    { name: "AWS_ACCESS_KEY_ID", value: AWS_ACCESS_KEY_ID },
+    { name: "AWS_SECRET_ACCESS_KEY", value: AWS_SECRET_ACCESS_KEY },
+    { name: "AWS_REGION", value: AWS_REGION },
     { name: "REPO_OWNER", value: importProject.repoOwner },
     { name: "REPO_NAME", value: importProject.repoName },
     { name: "BUILD_FOLDER", value: importProject.build.buildDir },
@@ -94,33 +83,28 @@ const generateEnvConfig = (importProject: ImportProject): string[] => {
     .map(({ name, value }) => `${name}=${value}`);
 };
 
-async function printLiveLogs(container: Docker.Container) {
+async function printLiveLogs(container: Docker.Container, dbId: string) {
   const logsStream = await container.logs({
     follow: true,
     stdout: true,
     stderr: true,
     tail: 100,
   });
-
-  logsStream.on("data", (chunk) => {
+  logsStream.on("data", async (chunk) => {
     const logData = chunk.toString("utf8").trim();
     const cleanedLogData = logData
-      .replace(/[\u0000-\u001F\u007F-\u009F]/g, "") // Remove control characters
-      .replace(/[^\x20-\x7E]/g, "") // Remove non-printable ASCII characters
-      .replace(/\s+/g, " ") // Replace multiple spaces with a single space
+      .replace(/[\u0000-\u001F\u007F-\u009F]/g, "")
+      .replace(/[^\x20-\x7E]/g, "")
+      .replace(/\s+/g, " ")
       .trim();
 
     if (cleanedLogData) {
-      fs.appendFileSync("./test/log.log", cleanedLogData + "\n", {
-        encoding: "utf8",
-      });
+      try {
+        await addLogs(dbId, cleanedLogData);
+      } catch (err) {}
     }
   });
 }
-
-fs.rm(logFilePath, { force: true }, () => {
-  console.log("Previous log file removed.");
-});
 
 redis?.on("error", (err) => {
   console.error("Error from Redis:", err);

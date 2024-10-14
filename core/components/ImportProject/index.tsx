@@ -1,7 +1,6 @@
 "use client";
 
 import { Github } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { ImportProjectType } from "@/types/project";
@@ -9,7 +8,7 @@ import ChooseDir from "./ChooseDir";
 import BuilAndOutput from "./BuilAndOutput";
 import EnvironmentVariable from "./EnvironmentVariable";
 import ChooseBranch from "./ChooseBranch";
-import { importProject } from "@/actions/gh/import";
+import ImportButton from "@/app/import/ImportButton";
 
 export default function ImportProject({
   importProjectData,
@@ -18,11 +17,6 @@ export default function ImportProject({
   importProjectData: ImportProjectType;
   setImportProjectData: React.Dispatch<React.SetStateAction<ImportProjectType>>;
 }) {
-  async function handleImportProject() {
-    importProject(importProjectData);
-    console.log(importProjectData);
-  }
-
   return (
     <div className="flex h-full w-full flex-col items-center overflow-y-auto overflow-x-hidden bg-background pt-40 text-foreground">
       <main className="mx-auto max-w-6xl p-8 xl:w-[900px]">
@@ -105,9 +99,8 @@ export default function ImportProject({
                   importProjectData={importProjectData}
                   setImportProjectData={setImportProjectData}
                 />
-                <Button className="w-full" onClick={handleImportProject}>
-                  Deploy
-                </Button>
+
+                <ImportButton importProjectData={importProjectData} />
               </div>
             </div>
           </div>

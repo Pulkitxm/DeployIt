@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export type ImportProjectType = {
   projectName: string;
   repoName: string;
@@ -35,3 +37,10 @@ export enum VIEW_MODE {
   grid = "grid",
   list = "list",
 }
+
+export const validateLogsZod = z.array(
+  z.object({
+    value: z.string(),
+    timestamp: z.string().transform((val) => new Date(val)),
+  }),
+);

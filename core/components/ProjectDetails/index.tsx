@@ -1,11 +1,14 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { GitBranch, Clock, Link, Terminal } from "lucide-react";
-import { getProjectDetails } from "@/actions/user/project";
+import { GitBranch, Clock, Link as LinkIcon, Terminal } from "lucide-react";
+import { getProjectDetails } from "@/actions/db/user";
 import { formatTimeAgo } from "@/lib/time";
+import Link from "next/link";
 
-export default async function ProjectDetails({
+const NEXT_PUBLIC_WEB_SERVER = process.env.NEXT_PUBLIC_WEB_SERVER;
+
+export default function ProjectDetails({
   project,
 }: {
   project: Exclude<Awaited<ReturnType<typeof getProjectDetails>>, null>;
@@ -22,7 +25,7 @@ export default async function ProjectDetails({
             </CardHeader>
             <CardContent>
               <div className="mb-2 flex items-center text-sm text-muted-foreground">
-                <Link className="mr-2 h-4 w-4" />
+                <LinkIcon className="mr-2 h-4 w-4" />
                 <span>ID: {project.id}</span>
               </div>
               <div className="flex items-center text-sm text-muted-foreground">
@@ -49,7 +52,12 @@ export default async function ProjectDetails({
               <CardTitle>Quick Actions</CardTitle>
             </CardHeader>
             <CardContent>
-              <Button className="mb-2 w-full">View Project</Button>
+              <Link
+                href={`${project.slug}.${NEXT_PUBLIC_WEB_SERVER}`}
+                target="_blank"
+              >
+                <Button className="mb-2 w-full">View Project</Button>
+              </Link>
               <Button variant="outline" className="w-full">
                 Edit Settings
               </Button>
@@ -78,17 +86,20 @@ export default async function ProjectDetails({
           </CardHeader>
           <CardContent>
             <p className="text-sm text-gray-400">
-              Last update: {project.updatedAt.toLocaleString()}
+              Last update: {project.updatedAt.toUTCString()}
             </p>
             {project.logs.length > 0 ? (
-              <div className="mt-4 max-h-60 overflow-y-auto">
+              <div className="max-h-60 overflow-y-auto">
                 <ul className="space-y-3">
                   {project.logs.map((log, index) => (
                     <li
                       key={index}
-                      className="border-b pb-2 text-sm text-gray-300"
+                      className="flex items-center border-b py-1 pb-2 text-sm text-gray-300"
                     >
-                      {log}
+                      <p className="mr-2 whitespace-nowrap rounded bg-gray-700 p-1 dark:bg-gray-900">
+                        {log.timestamp.toUTCString()}
+                      </p>
+                      <p>{log.value}</p>
                     </li>
                   ))}
                 </ul>

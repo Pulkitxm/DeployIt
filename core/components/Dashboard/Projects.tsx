@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Project } from "@/components/Dashboard/Project";
-import { getProjects } from "@/actions/user/project";
+import { getProjects } from "@/actions/db/user";
 import { SORT_ORDER, VIEW_MODE } from "@/types/project";
 import { localValues } from "../../lib/localValues";
 

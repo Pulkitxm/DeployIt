@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const validateImportProject = z.object({
+  dbId: z.string(),
   projectName: z.string(),
   repoName: z.string(),
   repoOwner: z.string(),

@@ -1,4 +1,4 @@
-import { getProjects } from "@/actions/user/project";
+import { getProjects } from "@/actions/db/user";
 import New from "@/app/new/page";
 import Projects from "@/components/Dashboard/Projects";
 import ProtectRouteUI from "@/components/ProtectRoute";
@@ -12,7 +12,20 @@ export default async function Dashboard() {
         <ProtectRouteUI />
       </div>
     );
-  const projects = await getProjects();
+
+  let projects: Awaited<ReturnType<typeof getProjects>> = [];
+  try {
+    projects = await getProjects();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (e: any) {
+    if (e.message === "User not found") {
+      return (
+        <div className="flex h-screen w-screen items-center justify-center">
+          <ProtectRouteUI />
+        </div>
+      );
+    }
+  }
 
   if (projects.length === 0) return <New />;
 

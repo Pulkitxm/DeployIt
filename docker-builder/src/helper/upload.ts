@@ -1,16 +1,20 @@
 import fs from "fs";
 import mime from "mime-types";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import { PROJECT_EXPORT_DIR, PROJECT_SLUG } from "../envVars";
-import { getGitignorePatterns } from "./git";
-import { runCommand } from "./shell";
-import { getFilesFromDirRec, getFormatedSize } from "./file";
+import {
+  AWS_ACCESS_KEY_ID,
+  AWS_REGION,
+  AWS_SECRET_ACCESS_KEY,
+  PROJECT_EXPORT_DIR,
+  PROJECT_SLUG,
+} from "../envVars";
+import { getFilesFromDirRec, getFormatedSize, getSize } from "./file";
 
 const s3Client = new S3Client({
-  region: "ap-south-1",
+  region: AWS_REGION!,
   credentials: {
-    accessKeyId: "AKIATJB4PKLS3ROKSPEX",
-    secretAccessKey: "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",
+    accessKeyId: AWS_ACCESS_KEY_ID!,
+    secretAccessKey: AWS_SECRET_ACCESS_KEY!,
   },
 });
 
@@ -28,29 +32,27 @@ async function uploadFileToS3(
     ContentType: !ContentType ? "application/octet-stream" : ContentType,
   });
   await s3Client.send(command);
+  console.log(
+    "File uploaded successfully: " +
+      filePath +
+      ", key: " +
+      PROJECT_SLUG +
+      "/" +
+      key,
+  );
 }
 
 export async function uploadBuildDirContents(buildDir: string) {
-  const sizeOfBuildDir = getFormatedSize(fs.statSync(buildDir).size);
-  console.log("Size of build dir: " + sizeOfBuildDir);
   console.log("Uploading files from: " + buildDir);
-  await runCommand({
-    command: "ls -la " + buildDir,
-  });
-  const ignorePatterns = getGitignorePatterns(buildDir);
-  console.log("Ignoring patterns:", ignorePatterns);
-  const files = getFilesFromDirRec(buildDir, ignorePatterns);
+  const files = getFilesFromDirRec(buildDir);
+  const sizeOfBuildDir = getFormatedSize(getSize(files));
+  console.log("Size of build dir: " + sizeOfBuildDir);
   for (const file of files) {
     await uploadFileToS3(
       "test-vultr",
       file,
       file.replace(PROJECT_EXPORT_DIR + "/", ""),
     );
-    console.log(
-      "Uploaded file: " + file,
-      ", key: " + file.replace(PROJECT_EXPORT_DIR + "/", ""),
-    );
   }
-  console.log("All files uploaded successfully.");
   console.log("Total files uploaded: " + files.length);
 }

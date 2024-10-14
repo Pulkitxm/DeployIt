@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { getProjects } from "@/actions/user/project";
+import { getProjects } from "@/actions/db/user";
 import { formatTimeAgo } from "@/lib/time";
 import { UpdateIcon } from "@radix-ui/react-icons";
 
@@ -26,7 +26,7 @@ export function Project({
         <div className="flex items-center text-sm text-muted-foreground">
           <GitFork className="mr-2 h-4 w-4" />
           <Link
-            href={`https://github.com/${project.repoOwner}/${project.repoName}`}
+            href={`https://github.com/${project.repoOwner}/${project.name}`}
             target="_blank"
             rel="noopener noreferrer"
             className="transition-colors hover:text-primary"
@@ -60,7 +60,7 @@ export function Project({
       </CardContent>
       <CardFooter>
         <Button asChild variant="outline" className="w-full">
-          <Link href={`/project/${project.name}`}>View Project</Link>
+          <Link href={`/project/${project.id}`}>View Project</Link>
         </Button>
       </CardFooter>
     </Card>

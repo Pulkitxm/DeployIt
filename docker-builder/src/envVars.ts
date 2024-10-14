@@ -16,8 +16,6 @@ export const PROJECT_SLUG = process.env.PROJECT_SLUG;
 export const repoUrlFromSecret = `https://${GITHUB_TOKEN}@github.com/${REPO_OWNER}/${REPO_NAME}.git`;
 export const REPO_URL = `https://github.com/${REPO_OWNER}/${REPO_NAME}`;
 
-export const BREAK_COUNT = parseInt(process.env.BREAK_COUNT!) ?? 30;
-
 export const projectDir = path.join(__dirname, "../project");
 export const workDir = ROOT_DIR ? path.join(projectDir, ROOT_DIR) : projectDir;
 export const exportProjectDir = path.join(
@@ -35,34 +33,12 @@ export const logFile = exportProjectDir;
   }
 });
 
-export const ignorePatterns = [
-  ".git",
-  "node_modules",
-  "dist",
-  "build",
-  "temp",
-  "coverage",
-  "output",
-  "export",
-  ".next",
-  ".vercel",
-  ".cache",
-  ".DS_Store",
-  ".env",
-  ".env.local",
-  ".env.production",
-  ".env.production.local",
-  ".env.development",
-  ".env.development.local",
-  ".env.test",
-  ".env.test.local",
-  ".env.travis",
-  "yarn.lock",
-  "pnpm-lock.yaml",
-  ".gitignore",
-  ".husky",
-  ".eslintrc.cjs",
-];
+
+export const AWS_REGION = process.env.AWS_REGION;
+export const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID;
+export const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
+
+
 
 console.log({
   GITHUB_TOKEN,
@@ -80,4 +56,7 @@ console.log({
   workDir,
   exportProjectDir,
   logFile,
+  AWS_REGION,
+  AWS_ACCESS_KEY_ID,
+  AWS_SECRET_ACCESS_KEY
 })

@@ -1,13 +1,13 @@
-import { getProjectDetails } from "@/actions/user/project";
+import { getProjectDetails } from "@/actions/db/user";
 import ErroDiv from "@/components/ui/ErrorDiv";
 import ProtectRouteUI from "@/components/ProtectRoute";
 import { getServerSession } from "next-auth";
 import ProjectDetails from "@/components/ProjectDetails";
 
 export default async function ProjectDetailsPage({
-  projectName,
+  projectId,
 }: {
-  projectName: string;
+  projectId: string;
 }) {
   const session = await getServerSession();
   if (!session)
@@ -17,7 +17,18 @@ export default async function ProjectDetailsPage({
       </div>
     );
 
-  const project = await getProjectDetails(projectName);
+  let project: Awaited<ReturnType<typeof getProjectDetails>> = null;
+  try {
+    project = await getProjectDetails(projectId);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (e: any) {
+    console.log(e);
+    return (
+      <div className="flex h-screen w-screen items-center justify-center">
+        <ProtectRouteUI />
+      </div>
+    );
+  }
 
   if (!project) {
     return (

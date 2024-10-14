@@ -1,27 +1,19 @@
 import path from "path";
 import fs from "fs";
-import ignore from "ignore";
 
 export function getFilesFromDirRec(
   dir: string,
-  ignorePatterns: string[],
 ): string[] {
   const files: string[] = [];
-  const ig = ignore().add(ignorePatterns);
 
   const getFilesRec = (dir: string) => {
     for (const file of fs.readdirSync(dir)) {
       const filePath = path.join(dir, file);
       const relativePath = path.relative(process.cwd(), filePath);
-
       if (fs.lstatSync(filePath).isDirectory()) {
-        if (!ig.ignores(relativePath)) {
-          getFilesRec(filePath);
-        }
+        getFilesRec(filePath);
       } else {
-        if (!ig.ignores(relativePath)) {
-          files.push(relativePath);
-        }
+        files.push(relativePath);
       }
     }
   };
@@ -31,14 +23,20 @@ export function getFilesFromDirRec(
   return files;
 }
 
-export function getFormatedSize(size: number) {
-  if (size < 1024) {
-    return size + "B";
-  } else if (size < 1024 * 1024) {
-    return (size / 1024).toFixed(2) + "KB";
-  } else if (size < 1024 * 1024 * 1024) {
-    return (size / (1024 * 1024)).toFixed(2) + "MB";
-  } else {
-    return (size / (1024 * 1024 * 1024)).toFixed(2) + "GB";
+export function getSize(files: string[]) {
+  let size = 0;
+  for (const file of files) {
+    size += fs.statSync(file).size;
   }
+  return size;
+}
+
+export function getFormatedSize(size: number) {
+  const units = ["B", "KB", "MB", "GB", "TB"];
+  let index = 0;
+  while (size >= 1024 && index < units.length - 1) {
+    size /= 1024;
+    index++;
+  }
+  return size.toFixed(index === 0 ? 0 : 2) + units[index];
 }

@@ -19,22 +19,6 @@ export async function importProject(importProject: ImportProjectType) {
   const accessToken = await getAccessTokenByEmail(session.user.email);
   const slug = generateSlug();
 
-  if (redis) {
-    console.log({
-      ...importProject,
-      GITHUB_TOKEN: accessToken,
-    });
-    const res = await redis.lpush(
-      "project_import_queue",
-      JSON.stringify({
-        ...importProject,
-        GITHUB_TOKEN: accessToken,
-        projectSlug: slug,
-      }),
-    );
-    console.log(res);
-  }
-
   const user = await prisma.user.findUnique({
     where: {
       email: session.user.email,
@@ -78,7 +62,24 @@ export async function importProject(importProject: ImportProjectType) {
     }),
   );
 
+  if (redis) {
+    console.log({
+      ...importProject,
+      GITHUB_TOKEN: accessToken,
+    });
+    await redis.lpush(
+      "project_import_queue",
+      JSON.stringify({
+        ...importProject,
+        GITHUB_TOKEN: accessToken,
+        projectSlug: slug,
+        dbId: newProject.id,
+      }),
+    );
+  }
+
   return {
     success: true,
+    id: newProject.id,
   };
 }

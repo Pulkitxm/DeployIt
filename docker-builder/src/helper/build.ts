@@ -71,7 +71,7 @@ export const buildAndCLone = async () => {
     }, {});
 
     await uploadBuildDirContents(exportProjectDir);
-    console.log("Successfully uploaded the build contents");
+    console.log("Successfully deployed the project");
         
   } catch (err: Error | any) {
     console.error(`Failed to complete the process: ${err.message}`);
