@@ -42,8 +42,6 @@ export async function importProject(importProject: ImportProjectType) {
       repoName: importProject.repoName,
       repoOwner: importProject.repoOwner,
       branch: importProject.branch,
-      buildCommand: importProject.build.buildCommand,
-      installCommand: importProject.build.installCommand,
       slug: slug,
       createdAt: new Date(),
       updatedAt: new Date(),

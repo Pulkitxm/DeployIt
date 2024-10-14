@@ -3,6 +3,7 @@ import "./globals.css";
 
 import Navbar from "@/components/Navbar";
 import AppWrapper from "../providers/app-wrapper";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -20,6 +21,7 @@ export default function RootLayout({
         <AppWrapper>
           <Navbar />
           {children}
+          <Toaster />
         </AppWrapper>
       </body>
     </html>

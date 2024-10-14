@@ -8,7 +8,7 @@ import ChooseDir from "./ChooseDir";
 import BuilAndOutput from "./BuilAndOutput";
 import EnvironmentVariable from "./EnvironmentVariable";
 import ChooseBranch from "./ChooseBranch";
-import ImportButton from "@/app/import/ImportButton";
+import ImportButton from "@/components/ImportProject/ImportButton";
 
 export default function ImportProject({
   importProjectData,

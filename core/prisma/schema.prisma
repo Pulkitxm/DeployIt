@@ -34,16 +34,14 @@ model Project {
   repoOwner String
   repoName  String
   branch    String
-  slug      String
+  slug      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   private   Boolean  @default(false)
 
   // Build & web info
-  buildCommand   String
-  installCommand String
-  size           Int    @default(0)
-  views          Int    @default(0)
+  size  Int @default(0)
+  views Int @default(0)
 
   // User relation
   userId String
