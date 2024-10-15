@@ -1,31 +1,60 @@
 import express from "express";
 import httpProxy from "http-proxy";
 import url from "url";
+import { getProjectDetails } from "./db.js";
+import { NOT_FOUND_PATH, BASE_PATH, CACHE_EXPIRY } from "./envVars.js";
+import { getDetails, setDetails } from "./redis.js";
 
 const app = express();
 const PORT = 8000;
-const BASE_PATH = "https://test-vultr.s3.ap-south-1.amazonaws.com";
 const proxy = httpProxy.createProxy();
 
-app.use((req, res) => {
+app.use(async (req, res) => {
   const hostname = req.hostname;
   const subdomain = hostname.split(".")[0];
-  req.subdomain = subdomain;
+  const slug = subdomain;
+  let data = { id: null, private: false };
 
-  const resolvesTo = `${BASE_PATH}/${subdomain}`;
+  try {
+    const cachedData = await getDetails(slug);
+    if (cachedData) {
+      console.log("Using cached data");
+      data = JSON.parse(cachedData);
+    } else {
+      console.log("Fetching data from database");
+      const newData = await getProjectDetails(slug);
+      if (newData && newData.id) {
+        data = newData;
+        setDetails(slug, JSON.stringify(data), CACHE_EXPIRY);
+      }
+    }
+  } catch (err) {
+    console.log(err);
+  }
+
+  if (!data.id || data.private) {
+    proxy.web(req, res, { target: NOT_FOUND_PATH, changeOrigin: true });
+    return;
+  }
+
+  req.id = data.id;
+  const resolvesTo = `${BASE_PATH}/${data.id}`;
 
   proxy.web(req, res, { target: resolvesTo, changeOrigin: true });
 });
 
 proxy.on("proxyReq", (proxyReq, req) => {
-  const subdomain = req.subdomain;
+  const id = req.id;
   let path = url.parse(req.url).pathname;
 
   if (path === "/" || !path.includes(".")) {
     path = "/index.html";
   }
-
-  proxyReq.path = `/${subdomain}${path}`;
+  if (id) {
+    proxyReq.path = `/${id}${path}`;
+  } else {
+    proxyReq.path = path;
+  }
 
   proxyReq.setHeader("X-Forwarded-Host", req.headers.host);
   proxyReq.setHeader("X-Forwarded-Proto", req.protocol);
@@ -33,7 +62,7 @@ proxy.on("proxyReq", (proxyReq, req) => {
 });
 
 proxy.on("proxyRes", (proxyRes, req, res) => {
-  const awsKeywords = ["amz-", "x-amz-", "s3", "aws"];
+  const awsKeywords = ["amz-", "x-amz-", "s3", "aws", "vercel", "cdn"];
 
   Object.keys(proxyRes.headers).forEach((header) => {
     const headerLower = header.toLowerCase();
@@ -44,6 +73,7 @@ proxy.on("proxyRes", (proxyRes, req, res) => {
           headerLower.includes(keyword) || valueLower.includes(keyword),
       )
     ) {
+      console.log("Deleting header:", header, proxyRes.headers[header]);
       delete proxyRes.headers[header];
     }
   });

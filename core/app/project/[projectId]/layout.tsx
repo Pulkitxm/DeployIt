@@ -23,9 +23,7 @@ export default async function ProjectDetailsLayout({
   return (
     <div className="container mx-auto mt-20 p-6">
       <header className="mb-8">
-        <h1 className="mb-4 text-3xl font-bold text-gray-200">
-          Project Details
-        </h1>
+        <h1 className="mb-4 text-3xl font-bold">Project Details</h1>
         <ProjectTabs projectId={params.projectId} />{" "}
         {/* Use the client component */}
       </header>

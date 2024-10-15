@@ -68,7 +68,7 @@ export default function ProjectLogs({
         {projectLogs.map((log, index) => (
           <li
             key={index}
-            className="flex items-start border-b border-gray-700 py-2 text-sm text-gray-300"
+            className="flex items-start border-b border-gray-700 py-2 text-sm"
           >
             <p className="mr-2 shrink-0 whitespace-nowrap rounded bg-gray-700 px-2 py-1 text-xs font-medium text-gray-300">
               {log.timestamp.toUTCString()}

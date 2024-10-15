@@ -50,12 +50,12 @@ export default function BuilAndOutput({
           }
         />
         <Input
-          placeholder="Install Command"
-          value={importProjectData.build.installCommand}
+          placeholder="Build Folder"
+          value={importProjectData.build.buildDir}
           onChange={(e) =>
             setImportProjectData((prev) => ({
               ...prev,
-              build: { ...prev.build, installCommand: e.target.value },
+              build: { ...prev.build, buildDir: e.target.value },
             }))
           }
         />

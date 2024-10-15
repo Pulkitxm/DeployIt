@@ -1,6 +1,11 @@
-import { createSecretKey } from "crypto";
-import { addLogs } from "./db";
-import { AWS_ACCESS_KEY_ID, AWS_REGION, AWS_SECRET_ACCESS_KEY, dokcerImage } from "./envVars";
+import {
+  AWS_ACCESS_KEY_ID,
+  AWS_REGION,
+  AWS_S3_BUCKET,
+  AWS_SECRET_ACCESS_KEY,
+  dokcerImage,
+} from "./envVars";
+import { printLiveLogs } from "./logs";
 import { ImportProject, validateImportProject } from "./project";
 import redis from "./redis";
 import Docker from "dockerode";
@@ -21,7 +26,6 @@ const loopHandler = async () => {
         JSON.parse(message),
       );
       if (parsedMessage.success) {
-        console.log("Validated project data:", parsedMessage.data);
         await handleProjectImportViaDocker(parsedMessage.data);
       } else {
         console.error("Validation error:", parsedMessage.error.issues);
@@ -37,10 +41,9 @@ const handleProjectImportViaDocker = async (importProject: ImportProject) => {
 
   const options: Docker.ContainerCreateOptions = {
     Image: dokcerImage,
-    name: "test-vercel-builder",
+    name: "deployit-" + importProject.projectId,
     Env: generateEnvConfig(importProject),
     HostConfig: {
-      AutoRemove: true,
       NetworkMode: "host",
     },
   };
@@ -50,6 +53,7 @@ const handleProjectImportViaDocker = async (importProject: ImportProject) => {
   try {
     const container = await docker.createContainer(options);
     await container.start();
+    
     printLiveLogs(container, importProject.dbId);
   } catch (error) {
     console.error("Error creating or starting container:", error);
@@ -63,15 +67,15 @@ const generateEnvConfig = (importProject: ImportProject): string[] => {
     { name: "AWS_ACCESS_KEY_ID", value: AWS_ACCESS_KEY_ID },
     { name: "AWS_SECRET_ACCESS_KEY", value: AWS_SECRET_ACCESS_KEY },
     { name: "AWS_REGION", value: AWS_REGION },
+    { name: "AWS_S3_BUCKET", value: AWS_S3_BUCKET },
     { name: "REPO_OWNER", value: importProject.repoOwner },
     { name: "REPO_NAME", value: importProject.repoName },
     { name: "BUILD_FOLDER", value: importProject.build.buildDir },
     { name: "ROOT_DIR", value: importProject.rootDir },
     { name: "GITHUB_TOKEN", value: importProject.GITHUB_TOKEN },
     { name: "BRANCH", value: importProject.branch },
-    { name: "PROJECT_SLUG", value: importProject.projectSlug },
+    { name: "PROJECT_ID", value: importProject.projectId },
     { name: "BUILD_COMMAND", value: importProject.build.buildCommand },
-    { name: "INSTALL_COMMAND", value: importProject.build.installCommand },
   ];
 
   for (const [key, { value }] of Object.entries(importProject.env.values)) {
@@ -83,28 +87,6 @@ const generateEnvConfig = (importProject: ImportProject): string[] => {
     .map(({ name, value }) => `${name}=${value}`);
 };
 
-async function printLiveLogs(container: Docker.Container, dbId: string) {
-  const logsStream = await container.logs({
-    follow: true,
-    stdout: true,
-    stderr: true,
-    tail: 100,
-  });
-  logsStream.on("data", async (chunk) => {
-    const logData = chunk.toString("utf8").trim();
-    const cleanedLogData = logData
-      .replace(/[\u0000-\u001F\u007F-\u009F]/g, "")
-      .replace(/[^\x20-\x7E]/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
-
-    if (cleanedLogData) {
-      try {
-        await addLogs(dbId, cleanedLogData);
-      } catch (err) {}
-    }
-  });
-}
 
 redis?.on("error", (err) => {
   console.error("Error from Redis:", err);

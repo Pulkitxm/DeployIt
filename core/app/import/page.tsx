@@ -23,7 +23,7 @@ export default function Import() {
       build: {
         open: false,
         buildCommand: "",
-        installCommand: "",
+        buildDir: "dist",
       },
       env: {
         open: false,

@@ -1,13 +1,20 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { GitBranch, Clock, Link as LinkIcon } from "lucide-react";
+import {
+  GitBranch,
+  Clock,
+  Link as LinkIcon,
+  EyeIcon,
+  ExternalLink,
+  GitFork,
+} from "lucide-react";
 import { getProjectDetails } from "@/actions/db/user";
 import { formatTimeAgo } from "@/lib/time";
 import Link from "next/link";
 import ProjectLogs from "./ProjectLogs";
-
-const NEXT_PUBLIC_WEB_SERVER = process.env.NEXT_PUBLIC_WEB_SERVER;
+import { NEXT_PUBLIC_WEB_SERVER } from "@/lib/envVars";
+import ProjectStatus from "./ProjectStatus";
 
 export default function ProjectDetails({
   project,
@@ -16,7 +23,10 @@ export default function ProjectDetails({
 }) {
   return (
     <>
-      <h1 className="mb-6 text-3xl font-bold underline">{project.name}</h1>
+      <div className="mb-6 flex items-center space-x-2">
+        <h1 className="text-3xl font-bold underline">{project.name}</h1>
+        <ProjectStatus id={project.id} />
+      </div>
       <div className="flex flex-col space-y-10">
         <div className="grid gap-6 md:grid-cols-2">
           {/* Project Information */}
@@ -24,8 +34,8 @@ export default function ProjectDetails({
             <CardHeader>
               <CardTitle>Project Information</CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="mb-2 flex items-center text-sm text-muted-foreground">
+            <CardContent className="flex flex-col space-y-1">
+              <div className="flex items-center text-sm text-muted-foreground">
                 <LinkIcon className="mr-2 h-4 w-4" />
                 <span>ID: {project.id}</span>
               </div>
@@ -33,8 +43,9 @@ export default function ProjectDetails({
                 <Clock className="mr-2 h-4 w-4" />
                 <span>Last Updated: {formatTimeAgo(project.updatedAt)}</span>
               </div>
-              <div className="mt-4 text-sm text-muted-foreground">
-                <span>Slug: {project.slug}</span>
+              <div className="flex items-center text-sm text-muted-foreground">
+                <EyeIcon className="mr-2 h-4 w-4" />
+                <span>Views: {project.views}</span>
               </div>
             </CardContent>
           </Card>
@@ -63,13 +74,32 @@ export default function ProjectDetails({
           <CardHeader>
             <CardTitle>Repository Details</CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="mb-2 text-sm text-muted-foreground">
-              Repository: {project.repoOwner}/{project.repoName}
-            </p>
+          <CardContent className="flex flex-col space-y-2">
             <div className="flex items-center text-sm text-muted-foreground">
-              <GitBranch className="mr-2 h-4 w-4" />
-              <span>Branch: {project.branch}</span>
+              <GitFork className="mr-2 h-4 w-4" />
+              <Link
+                href={`https://github.com/${project.repoOwner}/${project.repoName}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-colors hover:text-primary"
+              >
+                {project.repoOwner}/{project.repoName}
+                <ExternalLink className="ml-1 inline-block h-3 w-3" />
+              </Link>
+            </div>
+            <div className="flex items-start text-sm text-muted-foreground">
+              <div className="flex items-start text-sm text-muted-foreground">
+                <GitBranch className="mr-2 h-4 w-4" />
+                <Link
+                  href={`https://github.com/${project.repoOwner}/${project.repoName}/tree/${project.branch}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-colors hover:text-primary"
+                >
+                  {project.branch}
+                  <ExternalLink className="ml-1 inline-block h-3 w-3" />
+                </Link>
+              </div>
             </div>
           </CardContent>
         </Card>

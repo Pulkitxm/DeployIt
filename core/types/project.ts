@@ -10,7 +10,7 @@ export type ImportProjectType = {
   build: {
     open: boolean;
     buildCommand: string;
-    installCommand: string;
+    buildDir: string;
   };
   env: {
     open: boolean;

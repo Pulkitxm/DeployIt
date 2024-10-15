@@ -2,6 +2,7 @@
   "name": "vercel-clone",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
@@ -24,7 +25,9 @@
     "express-http-proxy": "^2.1.1",
     "http-proxy": "^1.18.1",
     "http-proxy-middleware": "^3.0.2",
+    "ioredis": "^5.4.1",
     "mime-types": "^2.1.35",
+    "pg": "^8.13.0",
     "prettier": "^3.3.3",
     "streamifier": "^0.1.1"
   }

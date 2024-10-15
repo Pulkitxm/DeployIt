@@ -4,3 +4,4 @@
 cd core && npm run format && npm run build
 cd "../docker-builder "npm run format && npm run build
 cd "../proxy-server" && npm run format
+cd .. && git add .

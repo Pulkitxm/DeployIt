@@ -19,7 +19,6 @@ export function getFilesFromDirRec(
   };
 
   getFilesRec(dir);
-  console.log("Files found:", files);
   return files;
 }
 

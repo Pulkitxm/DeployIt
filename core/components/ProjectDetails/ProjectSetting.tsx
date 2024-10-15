@@ -88,9 +88,6 @@ export default function ProjectSettings({
         <CardDescription>
           Manage your project&apos;s configuration and details.
         </CardDescription>
-        <CardDescription>
-          Manage your project&apos;s configuration and details.
-        </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>

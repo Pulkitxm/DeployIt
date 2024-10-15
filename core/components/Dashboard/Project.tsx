@@ -1,4 +1,4 @@
-import { GitBranch, GitFork, ExternalLink } from "lucide-react";
+import { GitBranch, Settings, Eye, Copy, Clock } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -9,58 +9,103 @@ import {
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { getProjects } from "@/actions/db/user";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { formatTimeAgo } from "@/lib/time";
-import { UpdateIcon } from "@radix-ui/react-icons";
+import { NEXT_PUBLIC_WEB_SERVER } from "@/lib/envVars";
+import { Input } from "../ui/input";
+import { useToast } from "@/hooks/use-toast";
+import ProjectStatus from "@/components/ProjectDetails/ProjectStatus";
 
 export function Project({
   project,
 }: {
   project: Awaited<ReturnType<typeof getProjects>>[0];
 }) {
+  const { toast } = useToast();
+
+  const projectUrl = `${project.slug}.${NEXT_PUBLIC_WEB_SERVER}`;
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    toast({
+      title: "Copied",
+      description: "Project URL copied to clipboard",
+    });
+  };
+
   return (
-    <Card className="transition-shadow hover:shadow-lg">
-      <CardHeader>
-        <CardTitle className="text-xl text-primary">{project.name}</CardTitle>
+    <Card className="flex w-full max-w-md flex-col space-y-3 shadow-md">
+      <CardHeader className="flex flex-row items-center justify-between pb-2">
+        <div className="flex items-center space-x-2">
+          <CardTitle className="text-xl font-semibold">
+            {project.name}
+          </CardTitle>
+          <ProjectStatus id={project.id} />
+        </div>
+        <div className="flex space-x-2">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => window.open(projectUrl, "_blank")}
+                >
+                  <Eye className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Preview Project</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
       </CardHeader>
-      <CardContent className="flex flex-col space-y-2">
-        <div className="flex items-center text-sm text-muted-foreground">
-          <GitFork className="mr-2 h-4 w-4" />
-          <Link
-            href={`https://github.com/${project.repoOwner}/${project.name}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="transition-colors hover:text-primary"
-          >
-            {project.repoOwner}/{project.repoName}
-            <ExternalLink className="ml-1 inline-block h-3 w-3" />
-          </Link>
+      <CardContent className="space-y-4">
+        <div className="flex items-center space-x-2">
+          <Input value={projectUrl} readOnly className="flex-grow" />
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => copyToClipboard(projectUrl)}
+                >
+                  <Copy className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Copy URL</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
-        <div className="flex items-start text-sm text-muted-foreground">
-          <div className="flex items-start text-sm text-muted-foreground">
-            <GitBranch className="mr-2 h-4 w-4" />
-            <Link
-              href={`https://github.com/${project.repoOwner}/${project.repoName}/tree/${project.branch}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="transition-colors hover:text-primary"
-            >
-              {project.branch}
-              <ExternalLink className="ml-1 inline-block h-3 w-3" />
-            </Link>
+        <div className="flex items-center justify-between text-sm">
+          <div className="flex items-center space-x-2">
+            <GitBranch className="h-4 w-4" />
+            <span>
+              {project.repoOwner}/{project.repoName}
+            </span>
           </div>
-        </div>
-        <div className="flex items-center text-sm text-muted-foreground">
-          <div className="flex items-start text-sm text-muted-foreground">
-            <UpdateIcon className="mr-2 h-4 w-4" />
-            <p className="transition-colors">
-              {formatTimeAgo(project.updatedAt)}
-            </p>
+          <div className="flex items-center space-x-2">
+            <Clock className="h-4 w-4" />
+            <span>Updated {formatTimeAgo(project.updatedAt)}</span>
           </div>
         </div>
       </CardContent>
-      <CardFooter>
-        <Button asChild variant="outline" className="w-full">
+      <CardFooter className="flex gap-1">
+        <Button asChild variant="default" className="w-full flex-grow">
           <Link href={`/project/${project.id}`}>View Project</Link>
+        </Button>
+        <Button asChild variant="default">
+          <Link href={`/project/${project.id}/settings`}>
+            <Settings className="h-4 w-4" />
+          </Link>
         </Button>
       </CardFooter>
     </Card>

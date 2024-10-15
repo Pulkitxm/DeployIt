@@ -70,7 +70,7 @@ export async function importProject(importProject: ImportProjectType) {
       JSON.stringify({
         ...importProject,
         GITHUB_TOKEN: accessToken,
-        projectSlug: slug,
+        projectId: newProject.id,
         dbId: newProject.id,
       }),
     );

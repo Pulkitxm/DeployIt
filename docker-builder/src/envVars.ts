@@ -11,7 +11,7 @@ export const BUILD_FOLDER = process.env.BUILD_FOLDER;
 export const BUILD_COMMAND = process.env.BUILD_COMMAND ?? "npm run build";
 export const BRANCH = process.env.BRANCH;
 export const PROJECT_EXPORT_DIR = process.env.PROJECT_EXPORT_DIR ?? "project";
-export const PROJECT_SLUG = process.env.PROJECT_SLUG;
+export const PROJECT_ID = process.env.PROJECT_ID;
 
 export const repoUrlFromSecret = `https://${GITHUB_TOKEN}@github.com/${REPO_OWNER}/${REPO_NAME}.git`;
 export const REPO_URL = `https://github.com/${REPO_OWNER}/${REPO_NAME}`;
@@ -33,30 +33,9 @@ export const logFile = exportProjectDir;
   }
 });
 
-
 export const AWS_REGION = process.env.AWS_REGION;
 export const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID;
 export const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
+export const AWS_S3_BUCKET = process.env.AWS_S3_BUCKET;
 
-
-
-console.log({
-  GITHUB_TOKEN,
-  REPO_OWNER,
-  REPO_NAME,
-  ROOT_DIR,
-  BUILD_FOLDER,
-  BUILD_COMMAND,
-  BRANCH,
-  PROJECT_EXPORT_DIR,
-  PROJECT_SLUG,
-  repoUrlFromSecret,
-  REPO_URL,
-  projectDir,
-  workDir,
-  exportProjectDir,
-  logFile,
-  AWS_REGION,
-  AWS_ACCESS_KEY_ID,
-  AWS_SECRET_ACCESS_KEY
-})
+export const maxBuildSize = 100000 * 1024 * 1024;

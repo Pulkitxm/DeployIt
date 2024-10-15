@@ -10,8 +10,7 @@ export const validateImportProject = z.object({
   build: z.object({
     open: z.boolean(),
     buildCommand: z.string(),
-    installCommand: z.string(),
-    buildDir: z.string().default("dist"),
+    buildDir: z.string(),
   }),
   env: z.object({
     open: z.boolean(),
@@ -23,7 +22,7 @@ export const validateImportProject = z.object({
     ),
   }),
   GITHUB_TOKEN: z.string(),
-  projectSlug: z.string(),
+  projectId: z.string(),
 });
 
 export type ImportProject = z.infer<typeof validateImportProject>;

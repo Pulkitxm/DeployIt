@@ -4,6 +4,7 @@ import {
   BUILD_FOLDER,
   exportProjectDir,
   GITHUB_TOKEN,
+  PROJECT_ID,
   REPO_URL,
   repoUrlFromSecret,
   workDir,
@@ -69,10 +70,13 @@ export const buildAndCLone = async () => {
       });
       console.log(exportProjectDir);
     }, {});
-
-    await uploadBuildDirContents(exportProjectDir);
+    if (!PROJECT_ID) {
+      console.error("Error: Missing PROJECT_ID");
+      process.exit(1);
+    }
+    console.log("Deploying the project");
+    await uploadBuildDirContents(PROJECT_ID, exportProjectDir);
     console.log("Successfully deployed the project");
-        
   } catch (err: Error | any) {
     console.error(`Failed to complete the process: ${err.message}`);
     process.exit(1);

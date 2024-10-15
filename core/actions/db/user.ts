@@ -41,6 +41,7 @@ export async function getProjects() {
       branch: true,
       updatedAt: true,
       slug: true,
+      status: true,
     },
   });
 
@@ -68,6 +69,8 @@ export async function getProjectDetails(projectId: string) {
       updatedAt: true,
       slug: true,
       private: true,
+      views: true,
+      status: true,
     },
   });
   if (!project) return null;

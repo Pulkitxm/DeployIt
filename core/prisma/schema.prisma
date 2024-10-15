@@ -40,8 +40,9 @@ model Project {
   private   Boolean  @default(false)
 
   // Build & web info
-  size  Int @default(0)
-  views Int @default(0)
+  size   Int    @default(0)
+  views  Int    @default(0)
+  status String @default("pending")
 
   // User relation
   userId String

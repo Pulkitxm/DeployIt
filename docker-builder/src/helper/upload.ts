@@ -4,9 +4,10 @@ import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import {
   AWS_ACCESS_KEY_ID,
   AWS_REGION,
+  AWS_S3_BUCKET,
   AWS_SECRET_ACCESS_KEY,
+  maxBuildSize,
   PROJECT_EXPORT_DIR,
-  PROJECT_SLUG,
 } from "../envVars";
 import { getFilesFromDirRec, getFormatedSize, getSize } from "./file";
 
@@ -19,6 +20,7 @@ const s3Client = new S3Client({
 });
 
 async function uploadFileToS3(
+  projectId: string,
   bucketName: string,
   filePath: string,
   key: string,
@@ -27,32 +29,33 @@ async function uploadFileToS3(
 
   const command = new PutObjectCommand({
     Bucket: bucketName,
-    Key: PROJECT_SLUG + "/" + key,
+    Key: projectId + "/" + key,
     Body: fs.createReadStream(filePath),
     ContentType: !ContentType ? "application/octet-stream" : ContentType,
   });
   await s3Client.send(command);
-  console.log(
-    "File uploaded successfully: " +
-      filePath +
-      ", key: " +
-      PROJECT_SLUG +
-      "/" +
-      key,
-  );
 }
 
-export async function uploadBuildDirContents(buildDir: string) {
-  console.log("Uploading files from: " + buildDir);
+export async function uploadBuildDirContents(
+  projectId: string,
+  buildDir: string,
+) {
   const files = getFilesFromDirRec(buildDir);
-  const sizeOfBuildDir = getFormatedSize(getSize(files));
-  console.log("Size of build dir: " + sizeOfBuildDir);
+  const sizeOfBuildDir = getSize(files);
+  const formatedSizeOfBuildDir = getFormatedSize(sizeOfBuildDir);
+  // console.log("Size of build dir: " + formatedSizeOfBuildDir);
+
+  if (sizeOfBuildDir > maxBuildSize) {
+    console.log("Size of build dir is too big, try with smaller files.");
+    process.exit(1);
+  }
+
   for (const file of files) {
     await uploadFileToS3(
-      "test-vultr",
+      projectId,
+      AWS_S3_BUCKET!,
       file,
       file.replace(PROJECT_EXPORT_DIR + "/", ""),
     );
   }
-  console.log("Total files uploaded: " + files.length);
 }
