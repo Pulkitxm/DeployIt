@@ -3,6 +3,7 @@ import path from "path";
 import fs from "fs";
 dotenv.config();
 
+export const OPERATION = process.env.OPERATION;
 export const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const REPO_OWNER = process.env.REPO_OWNER;
 const REPO_NAME = process.env.REPO_NAME;
@@ -38,4 +39,4 @@ export const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID;
 export const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
 export const AWS_S3_BUCKET = process.env.AWS_S3_BUCKET;
 
-export const maxBuildSize = 100000 * 1024 * 1024;
+export const maxBuildSize = 1 * 1024 * 1024;

@@ -1,6 +1,6 @@
 "use server";
 
-import { ImportProjectType } from "@/types/project";
+import { ImportProjectType, PROJECT_STATUS } from "@/types/project";
 import { prisma } from "@/db";
 import { getServerSession } from "next-auth";
 import { generateSlug } from "@/lib/project";
@@ -45,6 +45,7 @@ export async function importProject(importProject: ImportProjectType) {
       slug: slug,
       createdAt: new Date(),
       updatedAt: new Date(),
+      status: PROJECT_STATUS.BUILD_IN_QUEUE,
     },
   });
 
@@ -66,14 +67,24 @@ export async function importProject(importProject: ImportProjectType) {
       GITHUB_TOKEN: accessToken,
     });
     await redis.lpush(
-      "project_import_queue",
+      "project_queue",
       JSON.stringify({
         ...importProject,
         GITHUB_TOKEN: accessToken,
         projectId: newProject.id,
         dbId: newProject.id,
+        OPERATION: "BUILD",
       }),
     );
+
+    await prisma.project.update({
+      where: {
+        id: newProject.id,
+      },
+      data: {
+        status: PROJECT_STATUS.BUILD_IN_QUEUE,
+      },
+    });
   }
 
   return {

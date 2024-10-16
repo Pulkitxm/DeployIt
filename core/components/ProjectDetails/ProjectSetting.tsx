@@ -30,6 +30,7 @@ import {
   validateFrojectUpdateFormType,
   ProjectUpdateFormType,
 } from "@/types/project";
+import DeleteProject from "./DeleteButton";
 
 export default function ProjectSettings({
   project,
@@ -148,7 +149,7 @@ export default function ProjectSettings({
           </form>
         </Form>
       </CardContent>
-      <CardFooter>
+      <CardFooter className="flex flex-col items-start space-y-10">
         <Button
           type="submit"
           onClick={form.handleSubmit(onSubmit)}
@@ -156,6 +157,7 @@ export default function ProjectSettings({
         >
           {isLoading ? "Updating..." : "Update Project Settings"}
         </Button>
+        <DeleteProject project={project} />
       </CardFooter>
     </Card>
   );

@@ -1,5 +1,6 @@
 import { Pool } from "pg";
 import { DATABASE_URL } from "./envVars";
+import { PROJECT_STATUS } from "./types/project";
 
 const pool = new Pool({ connectionString: DATABASE_URL });
 
@@ -30,7 +31,11 @@ export async function addLogsToDB(
   }
 }
 
-export async function updateStatusToDb(projectId: string, status: string) {
+export async function updateStatusToDb(
+  projectId: string,
+  status: PROJECT_STATUS,
+) {
+  console.log("Updating status:", status, "for project:", projectId);
   try {
     const query = `
       UPDATE "Project"
@@ -38,6 +43,19 @@ export async function updateStatusToDb(projectId: string, status: string) {
       WHERE id = $2
     `;
     await pool.query(query, [status, projectId]);
+  } catch (err: any) {
+    console.error("Error updating status:", err.message);
+  }
+}
+
+export async function markAsDeleted(projectId: string) {
+  try {
+    const query = `
+      UPDATE "Project"
+      SET is_deleted = true, status = '${PROJECT_STATUS.DELETE_SUCCESS}'
+      WHERE id = $1
+    `;
+    await pool.query(query, [projectId]);
   } catch (err: any) {
     console.error("Error updating status:", err.message);
   }

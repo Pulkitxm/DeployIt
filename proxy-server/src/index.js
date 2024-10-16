@@ -32,6 +32,7 @@ app.use(async (req, res) => {
     console.log(err);
   }
 
+  console.log(data);
   if (!data.id || data.private) {
     proxy.web(req, res, { target: NOT_FOUND_PATH, changeOrigin: true });
     return;
@@ -73,7 +74,6 @@ proxy.on("proxyRes", (proxyRes, req, res) => {
           headerLower.includes(keyword) || valueLower.includes(keyword),
       )
     ) {
-      console.log("Deleting header:", header, proxyRes.headers[header]);
       delete proxyRes.headers[header];
     }
   });

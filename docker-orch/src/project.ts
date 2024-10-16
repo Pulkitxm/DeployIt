@@ -25,4 +25,13 @@ export const validateImportProject = z.object({
   projectId: z.string(),
 });
 
+export const validateDeleteProject = z.object({
+  projectId: z.string(),
+});
+
+export const validateProjectOperation = z.object({
+  OPERATION: z.enum(["BUILD", "DELETE"]),
+});
+
 export type ImportProject = z.infer<typeof validateImportProject>;
+export type DeleteProject = z.infer<typeof validateDeleteProject>;

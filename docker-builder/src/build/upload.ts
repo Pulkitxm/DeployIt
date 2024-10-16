@@ -1,23 +1,9 @@
 import fs from "fs";
 import mime from "mime-types";
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import {
-  AWS_ACCESS_KEY_ID,
-  AWS_REGION,
-  AWS_S3_BUCKET,
-  AWS_SECRET_ACCESS_KEY,
-  maxBuildSize,
-  PROJECT_EXPORT_DIR,
-} from "../envVars";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { AWS_S3_BUCKET, maxBuildSize, PROJECT_EXPORT_DIR } from "../envVars";
 import { getFilesFromDirRec, getFormatedSize, getSize } from "./file";
-
-const s3Client = new S3Client({
-  region: AWS_REGION!,
-  credentials: {
-    accessKeyId: AWS_ACCESS_KEY_ID!,
-    secretAccessKey: AWS_SECRET_ACCESS_KEY!,
-  },
-});
+import { s3Client } from "../helpers/aws";
 
 async function uploadFileToS3(
   projectId: string,

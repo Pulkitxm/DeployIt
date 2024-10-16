@@ -3,3 +3,5 @@ tsconfig.tsbuildinfo
 node_modules/
 .env
 dist/
+export/
+project/

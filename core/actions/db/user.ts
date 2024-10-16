@@ -32,6 +32,7 @@ export async function getProjects() {
   const projects = await prisma.project.findMany({
     where: {
       userId,
+      is_deleted: false,
     },
     select: {
       id: true,
@@ -59,6 +60,7 @@ export async function getProjectDetails(projectId: string) {
     where: {
       userId,
       id: projectId,
+      is_deleted: false,
     },
     select: {
       id: true,
@@ -82,6 +84,7 @@ export async function getProjectLogs(projectId: string) {
   const logs = await prisma.project.findUnique({
     where: {
       id: projectId,
+      is_deleted: false,
     },
     select: {
       logs: true,
@@ -112,6 +115,7 @@ export async function updateProject(
   const project = await prisma.project.update({
     where: {
       id: projectId,
+      is_deleted: false,
     },
     data: {
       name: values.name,

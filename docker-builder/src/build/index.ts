@@ -9,9 +9,9 @@ import {
   repoUrlFromSecret,
   workDir,
 } from "../envVars";
-import { runCommand } from "../helper/shell";
-import { cloneRepo } from "./git";
-import { executeProcess } from "./process";
+import { cloneRepo } from "../helpers/git";
+import { executeProcess } from "../helpers/process";
+import { runCommand } from "../helpers/shell";
 import { uploadBuildDirContents } from "./upload";
 
 export const buildAndCLone = async () => {
