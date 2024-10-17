@@ -9,7 +9,8 @@ export const runCommand = async ({
 }) => {
   return new Promise((resolve, reject) => {
     const process = exec(command, { cwd });
-    // console.log(`Running command: ${command}`);
+    console.log(`Running command: ${command}`);
+    exec("ls", { cwd });
     if (process.stdout) {
       process.stdout.on("data", (data) => {
         console.log(data.toString());

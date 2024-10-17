@@ -18,6 +18,7 @@ async function uploadFileToS3(
     Key: projectId + "/" + key,
     Body: fs.createReadStream(filePath),
     ContentType: !ContentType ? "application/octet-stream" : ContentType,
+    ACL: "public-read",
   });
   await s3Client.send(command);
 }

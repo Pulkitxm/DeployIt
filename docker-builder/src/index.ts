@@ -4,6 +4,7 @@ import {
   AWS_ACCESS_KEY_ID,
   AWS_REGION,
   AWS_S3_BUCKET,
+  AWS_S3_ENDPOINT,
   AWS_SECRET_ACCESS_KEY,
   GITHUB_TOKEN,
   OPERATION,
@@ -23,7 +24,8 @@ if (!OPERATION) {
       !AWS_ACCESS_KEY_ID ||
       !AWS_SECRET_ACCESS_KEY ||
       !AWS_REGION ||
-      !AWS_S3_BUCKET
+      !AWS_S3_BUCKET ||
+      !AWS_S3_ENDPOINT
     ) {
       console.error("Error: Missing environment variables.");
       process.exit(1);
@@ -36,7 +38,8 @@ if (!OPERATION) {
       !AWS_ACCESS_KEY_ID ||
       !AWS_SECRET_ACCESS_KEY ||
       !AWS_REGION ||
-      !AWS_S3_BUCKET
+      !AWS_S3_BUCKET ||
+      !AWS_S3_ENDPOINT
     ) {
       console.log({
         AWS_ACCESS_KEY_ID,

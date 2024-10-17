@@ -3,9 +3,11 @@ import {
   AWS_ACCESS_KEY_ID,
   AWS_REGION,
   AWS_S3_BUCKET,
+  AWS_S3_ENDPOINT,
   AWS_SECRET_ACCESS_KEY,
   BUILD_TIMEOUT,
   dockerImage,
+  MEMORY_LIMIT,
 } from "../envVars";
 import { printLiveLogs } from "../logs";
 import { ImportProject } from "../project";
@@ -24,10 +26,8 @@ export const handleProjectImportViaDocker = async (
     Env: generateEnvConfig(importProject),
     HostConfig: {
       NetworkMode: "host",
-      Memory: 500 * 1024 * 1024,
-      CpuCount: 2,
-      CpuPeriod: 100000,
-      CpuQuota: 100000,
+      // Memory: MEMORY_LIMIT,
+      // CpuCount: 2,
     },
   };
 
@@ -91,6 +91,7 @@ const generateEnvConfig = (importProject: ImportProject): string[] => {
     { name: "BREAK_COUNT", value: 150 },
     { name: "AWS_ACCESS_KEY_ID", value: AWS_ACCESS_KEY_ID },
     { name: "AWS_SECRET_ACCESS_KEY", value: AWS_SECRET_ACCESS_KEY },
+    { name: "AWS_S3_ENDPOINT", value: AWS_S3_ENDPOINT },
     { name: "AWS_REGION", value: AWS_REGION },
     { name: "AWS_S3_BUCKET", value: AWS_S3_BUCKET },
     { name: "REPO_OWNER", value: importProject.repoOwner },

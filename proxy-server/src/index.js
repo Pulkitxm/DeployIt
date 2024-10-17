@@ -2,7 +2,7 @@ import express from "express";
 import httpProxy from "http-proxy";
 import url from "url";
 import { getProjectDetails } from "./db.js";
-import { NOT_FOUND_PATH, BASE_PATH, CACHE_EXPIRY } from "./envVars.js";
+import { NOT_FOUND_PATH, BASE_PATH, CACHE_EXPIRY, DOMAIN } from "./envVars.js";
 import { getDetails, setDetails } from "./redis.js";
 
 const app = express();
@@ -12,6 +12,7 @@ const proxy = httpProxy.createProxy();
 app.use(async (req, res) => {
   const hostname = req.hostname;
   const subdomain = hostname.split(".")[0];
+  console.log(subdomain);
   const slug = subdomain;
   let data = { id: null, private: false };
 
@@ -32,12 +33,7 @@ app.use(async (req, res) => {
     console.log(err);
   }
 
-  if (
-    !data.id ||
-    data.private ||
-    data.status === "build_in_queue" ||
-    data.status === "delete_in_queue"
-  ) {
+  if (!data.id || data.private || data.status != "build_success") {
     proxy.web(req, res, { target: NOT_FOUND_PATH, changeOrigin: true });
     return;
   }

@@ -25,7 +25,7 @@ export const buildAndCLone = async () => {
         await cloneRepo(repoUrlFromSecret, BRANCH);
       },
       {
-        initialLog: "Cloning repository from Github",
+        initialLog: `Cloning repository from Github ${REPO_URL}`,
         finalLog: `Project cloned`,
       },
     );

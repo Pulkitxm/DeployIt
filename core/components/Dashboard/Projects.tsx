@@ -157,7 +157,11 @@ export default function DashboardClient({
             className={`grid gap-6 ${viewMode === VIEW_MODE.grid ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"}`}
           >
             {filteredAndSortedProjects.map((project) => (
-              <Project key={project.id} project={project} />
+              <Project
+                key={project.id}
+                project={project}
+                isExpanded={viewMode === VIEW_MODE.list}
+              />
             ))}
           </div>
         )}

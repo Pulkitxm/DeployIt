@@ -9,3 +9,4 @@ export const NOT_FOUND_PATH = process.env.NOT_FOUND_PATH;
 export const REDIS_URL = process.env.REDIS_URL;
 
 export const CACHE_EXPIRY = 60 * 2;
+export const DOMAIN = process.env.DOMAIN;

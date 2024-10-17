@@ -57,7 +57,7 @@ export default function ProjectDetails({
             </CardHeader>
             <CardContent>
               <Link
-                href={`${project.slug}.${NEXT_PUBLIC_WEB_SERVER}`}
+                href={`https://${project.slug}.${NEXT_PUBLIC_WEB_SERVER}`}
                 target="_blank"
               >
                 <Button className="mb-2 w-full">View Project</Button>

@@ -27,9 +27,8 @@ export default function DeleteProject({ project }: { project: ProjectType }) {
 
   const handleDelete = async () => {
     if (
-      true
-      // projectName === project.name &&
-      // deleteKeyword.toLowerCase() === "delete"
+      projectName === project.name &&
+      deleteKeyword.toLowerCase() === "delete"
     ) {
       try {
         setLoading(true);
@@ -92,10 +91,10 @@ export default function DeleteProject({ project }: { project: ProjectType }) {
             <Button
               variant="destructive"
               onClick={handleDelete}
-              // disabled={
-              //   projectName !== project.name ||
-              //   deleteKeyword.toLowerCase() !== "delete"
-              // }
+              disabled={
+                projectName !== project.name ||
+                deleteKeyword.toLowerCase() !== "delete"
+              }
               className="w-32"
             >
               {loading ? (

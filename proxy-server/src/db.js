@@ -1,12 +1,8 @@
 import pkg from "pg";
 import { DATABASE_URL } from "./envVars.js";
 
-const { Client } = pkg;
-const client = new Client(DATABASE_URL);
-
-client.connect().then(async () => {
-  console.log("connected to database");
-});
+const { Pool } = pkg;
+const pool = new Pool({ connectionString: DATABASE_URL });
 
 export async function getProjectDetails(projectSlug) {
   try {
@@ -16,6 +12,7 @@ export async function getProjectDetails(projectSlug) {
     `
       .trim()
       .replace(/\s+/g, " ");
+    const client = await pool.connect();
     const res = await client.query(query, [projectSlug]);
     if (!res) return null;
     const id = res.rows[0].id;
@@ -33,6 +30,7 @@ export async function increaeVisitCount(projectId) {
       SET "views" = "views" + 1
       WHERE id = $1
     `;
+    const client = await pool.connect();
     const res = await client.query(query, [projectId]);
     return res.rows[0].id;
   } catch (err) {

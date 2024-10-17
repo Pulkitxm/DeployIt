@@ -23,12 +23,14 @@ import ProjectStatus from "@/components/ProjectDetails/ProjectStatus";
 
 export function Project({
   project,
+  isExpanded,
 }: {
   project: Awaited<ReturnType<typeof getProjects>>[0];
+  isExpanded?: boolean;
 }) {
   const { toast } = useToast();
 
-  const projectUrl = `${project.slug}.${NEXT_PUBLIC_WEB_SERVER}`;
+  const projectUrl = `https://${project.slug}.${NEXT_PUBLIC_WEB_SERVER}`;
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     toast({
@@ -38,7 +40,11 @@ export function Project({
   };
 
   return (
-    <Card className="flex w-full max-w-md flex-col space-y-3 shadow-md">
+    <Card
+      className={`flex w-full ${
+        isExpanded ? "" : "max-w-md"
+      } flex-col space-y-3 shadow-md`}
+    >
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <div className="flex items-center space-x-2">
           <CardTitle className="text-xl font-semibold">

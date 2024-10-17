@@ -1,33 +1,29 @@
 services:
-
-  postgres:
-    container_name: deployit-postgres
-    image: postgres
+  core:
+    build:
+      context: ./core
+      dockerfile: Dockerfile
     ports:
-      - "5432:5432"
-    env_file:
-      - ./core/.env
-    volumes:
-      - postgres_data_dwl:/var/lib/postgresql/data
-  pgweb:
-    container_name: deployit-pgweb
-    restart: always
-    image: sosedoff/pgweb
-    ports:
-      - "8002:8081"
-    links:
-      - postgres:postgres
-    env_file:
-      - ./core/.env
+      - "3000:3000"
     depends_on:
-      - postgres
-  redis-stack:
-    container_name: deployit-redis-stack
-    image: redis/redis-stack:latest
+      - redis
+    env_file:
+      - ./core/.env
+
+  proxy-server:
+    build:
+      context: ./proxy-server
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    env_file:
+      - ./proxy-server/.env
+
+  redis:
+    container_name: deployit-redis
+    image: redis/redis-stack-server
     ports:
       - "6379:6379"
-      - "8001:8001"
     restart: always
-
-volumes:
-  postgres_data_dwl:

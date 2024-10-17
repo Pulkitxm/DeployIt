@@ -3,6 +3,10 @@ import { REDIS_URL } from "./envVars.js";
 
 const redis = new Redis(REDIS_URL);
 
+redis.on("connect", () => {
+  console.log("Connected to Redis");
+});
+
 export async function getDetails(slug) {
   try {
     return await redis.get(slug);
