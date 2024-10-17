@@ -13,9 +13,10 @@ export async function getProjectDetails(projectSlug) {
     const query = `
       SELECT id,private,status FROM "Project"
       WHERE slug = $1
-    `;
+    `
+      .trim()
+      .replace(/\s+/g, " ");
     const res = await client.query(query, [projectSlug]);
-    console.log(res);
     if (!res) return null;
     const id = res.rows[0].id;
     increaeVisitCount(id);

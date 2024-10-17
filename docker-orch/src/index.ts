@@ -28,7 +28,7 @@ const loopHandler = async () => {
             console.error("Validation error:", parsedMessageProject.error.issues);
             continue;
           }
-          handleDeleteProjectDocker(parsedMessageProject.data);
+          await handleDeleteProjectDocker(parsedMessageProject.data);
         }
       } else {
         console.error("Validation error:", parsedMessage.error.issues);

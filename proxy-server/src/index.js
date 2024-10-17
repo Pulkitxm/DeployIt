@@ -32,15 +32,18 @@ app.use(async (req, res) => {
     console.log(err);
   }
 
-  console.log(data);
-  if (!data.id || data.private) {
+  if (
+    !data.id ||
+    data.private ||
+    data.status === "build_in_queue" ||
+    data.status === "delete_in_queue"
+  ) {
     proxy.web(req, res, { target: NOT_FOUND_PATH, changeOrigin: true });
     return;
   }
 
   req.id = data.id;
   const resolvesTo = `${BASE_PATH}/${data.id}`;
-
   proxy.web(req, res, { target: resolvesTo, changeOrigin: true });
 });
 

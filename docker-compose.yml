@@ -1,0 +1,33 @@
+services:
+
+  postgres:
+    container_name: deployit-postgres
+    image: postgres
+    ports:
+      - "5432:5432"
+    env_file:
+      - ./core/.env
+    volumes:
+      - postgres_data_dwl:/var/lib/postgresql/data
+  pgweb:
+    container_name: deployit-pgweb
+    restart: always
+    image: sosedoff/pgweb
+    ports:
+      - "8002:8081"
+    links:
+      - postgres:postgres
+    env_file:
+      - ./core/.env
+    depends_on:
+      - postgres
+  redis-stack:
+    container_name: deployit-redis-stack
+    image: redis/redis-stack:latest
+    ports:
+      - "6379:6379"
+      - "8001:8001"
+    restart: always
+
+volumes:
+  postgres_data_dwl:

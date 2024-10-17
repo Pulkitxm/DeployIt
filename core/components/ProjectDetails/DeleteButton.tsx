@@ -13,24 +13,35 @@ import { Label } from "@/components/ui/label";
 import { getProjectDetails } from "@/actions/db/user";
 import { deleteProject } from "@/actions/gh/delete";
 import { useRouter } from "next/navigation";
+import { LoaderCircle } from "lucide-react";
 
 type ProjectType = Exclude<Awaited<ReturnType<typeof getProjectDetails>>, null>;
 
 export default function DeleteProject({ project }: { project: ProjectType }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [projectName, setProjectName] = useState(project.name);
-  const [deleteKeyword, setDeleteKeyword] = useState("delete");
+  const [loading, setLoading] = useState(false);
+  const [projectName, setProjectName] = useState("");
+  const [deleteKeyword, setDeleteKeyword] = useState("");
 
   const router = useRouter();
 
   const handleDelete = async () => {
     if (
-      projectName === project.name &&
-      deleteKeyword.toLowerCase() === "delete"
+      true
+      // projectName === project.name &&
+      // deleteKeyword.toLowerCase() === "delete"
     ) {
-      await deleteProject(project.id);
-      setIsOpen(false);
-      router.push("/dashboard");
+      try {
+        setLoading(true);
+        await deleteProject(project.id);
+        router.push("/dashboard");
+        setLoading(false);
+        setIsOpen(false);
+      } catch (error) {
+        console.log(error);
+        setLoading(false);
+        setIsOpen(false);
+      }
     }
   };
 
@@ -81,12 +92,17 @@ export default function DeleteProject({ project }: { project: ProjectType }) {
             <Button
               variant="destructive"
               onClick={handleDelete}
-              disabled={
-                projectName !== project.name ||
-                deleteKeyword.toLowerCase() !== "delete"
-              }
+              // disabled={
+              //   projectName !== project.name ||
+              //   deleteKeyword.toLowerCase() !== "delete"
+              // }
+              className="w-32"
             >
-              Delete Project
+              {loading ? (
+                <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                "Delete Project"
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>

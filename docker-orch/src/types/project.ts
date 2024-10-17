@@ -8,4 +8,7 @@ export enum PROJECT_STATUS {
   DELETE_FAILED = "delete_failed",
   DELETE_SUCCESS = "delete_success",
   DELETE_IN_QUEUE = "delete_in_queue",
+
+  BUILD_TIMEOUT = "build_timeout",
+  DELETE_TIMEOUT = "delete_timeout",
 }

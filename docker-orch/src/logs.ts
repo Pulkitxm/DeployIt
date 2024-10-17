@@ -5,7 +5,6 @@ import { PROJECT_STATUS } from "./types/project";
 export async function printLiveLogs(
   container: Docker.Container,
   dbId: string,
-  OPERATION: "build" | "delete",
   finalOP?: () => Promise<void> | void,
 ) {
   const logsStream = await container.logs({
@@ -24,27 +23,15 @@ export async function printLiveLogs(
       .replace(/[^\x20-\x7E]/g, "")
       .replace(/\s+/g, " ")
       .trim();
-    console.log(cleanedLogData);
     if (cleanedLogData) {
       logs.push(cleanedLogData);
     }
   });
 
   logsStream.on("end", async () => {
-    const containerInfo = await container.inspect();
     if (logs.length > 0) {
       await addLogsToDB(dbId, logs.slice(2));
     }
-    await updateStatusToDb(
-      dbId,
-      containerInfo.State.ExitCode === 0
-        ? OPERATION === "build"
-          ? PROJECT_STATUS.BUILD_SUCCESS
-          : PROJECT_STATUS.DELETE_SUCCESS
-        : OPERATION === "build"
-        ? PROJECT_STATUS.BUILD_FAILED
-        : PROJECT_STATUS.DELETE_FAILED,
-    );
     if (finalOP) await finalOP();
     console.log("Logs added to DB");
   });

@@ -1,6 +1,12 @@
 "use client";
 
-import { CheckCircle, XCircle, Loader, TimerIcon } from "lucide-react";
+import {
+  CheckCircle,
+  XCircle,
+  Loader,
+  TimerIcon,
+  TimerOff,
+} from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -72,7 +78,7 @@ export default function ProjectStatus({
       case PROJECT_STATUS.BUILD_PENDING:
         return "Building...";
       case PROJECT_STATUS.BUILD_IN_QUEUE:
-        return "Building...";
+        return "In Queue...";
       case PROJECT_STATUS.DELETE_PENDING:
         return "Deleting...";
       case PROJECT_STATUS.DELETE_FAILED:
@@ -80,7 +86,11 @@ export default function ProjectStatus({
       case PROJECT_STATUS.DELETE_SUCCESS:
         return "Delete Succeeded";
       case PROJECT_STATUS.DELETE_IN_QUEUE:
-        return "Deleting...";
+        return "In Queue...";
+      case PROJECT_STATUS.BUILD_TIMEOUT:
+        return "Build Timeout";
+      case PROJECT_STATUS.DELETE_TIMEOUT:
+        return "Delete Timeout";
       default:
         return "Pending";
     }
@@ -103,6 +113,10 @@ export default function ProjectStatus({
         return <CheckCircle className="h-5 w-5 text-red-500" />;
       case PROJECT_STATUS.DELETE_IN_QUEUE:
         return <TimerIcon className="h-5 w-5 animate-pulse text-red-500" />;
+      case PROJECT_STATUS.BUILD_TIMEOUT:
+        return <TimerOff className="h-5 w-5 text-orange-500" />;
+      case PROJECT_STATUS.DELETE_TIMEOUT:
+        return <TimerOff className="h-5 w-5 text-red-500" />;
       default:
         return <Loader className="h-5 w-5 animate-spin text-yellow-500" />;
     }

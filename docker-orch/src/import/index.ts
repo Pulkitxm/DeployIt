@@ -4,7 +4,8 @@ import {
   AWS_REGION,
   AWS_S3_BUCKET,
   AWS_SECRET_ACCESS_KEY,
-  dokcerImage,
+  BUILD_TIMEOUT,
+  dockerImage,
 } from "../envVars";
 import { printLiveLogs } from "../logs";
 import { ImportProject } from "../project";
@@ -18,7 +19,7 @@ export const handleProjectImportViaDocker = async (
   const docker = new Docker({});
 
   const options: Docker.ContainerCreateOptions = {
-    Image: dokcerImage,
+    Image: dockerImage,
     name: "deployit-build-" + importProject.projectId,
     Env: generateEnvConfig(importProject),
     HostConfig: {
@@ -37,10 +38,50 @@ export const handleProjectImportViaDocker = async (
     await container.start();
     await updateStatusToDb(importProject.dbId, PROJECT_STATUS.BUILD_PENDING);
 
-    printLiveLogs(container, importProject.dbId, "build");
-    await container.wait();
+    const buildProcess = new Promise<void>(async (resolve, reject) => {
+      try {
+        printLiveLogs(container, importProject.dbId);
+        await container.wait();
+        const containerInfo = await container.inspect();
+        console.log("Container exit code:", containerInfo.State);
+        await updateStatusToDb(
+          importProject.dbId,
+          containerInfo.State.ExitCode === 0
+            ? PROJECT_STATUS.BUILD_SUCCESS
+            : PROJECT_STATUS.BUILD_FAILED,
+        );
+        resolve();
+      } catch (error) {
+        reject(error);
+      }
+    });
+
+    const timeout = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error("BUILD_TIMEOUT")), BUILD_TIMEOUT),
+    );
+
+    await Promise.race([buildProcess, timeout]);
   } catch (error) {
-    console.error("Error creating or starting container:", error);
+    console.error("Error during build process:", error);
+    if (error instanceof Error && error.message === "BUILD_TIMEOUT") {
+      await updateStatusToDb(importProject.dbId, PROJECT_STATUS.BUILD_TIMEOUT);
+      const container = docker.getContainer(
+        "deployit-build-" + importProject.projectId,
+      );
+      try {
+        await container.stop();
+        console.log(
+          `Container stopped due to timeout: deployit-build-${importProject.projectId}`,
+        );
+      } catch (stopError) {
+        console.error(
+          `Failed to stop container: deployit-build-${importProject.projectId}`,
+          stopError,
+        );
+      }
+    } else {
+      await updateStatusToDb(importProject.dbId, PROJECT_STATUS.BUILD_FAILED);
+    }
   }
 };
 

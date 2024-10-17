@@ -75,26 +75,26 @@ export default function ProjectDetails({
             <CardTitle>Repository Details</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col space-y-2">
-            <div className="flex items-center text-sm text-muted-foreground">
+            <div className="group flex items-center text-sm text-muted-foreground">
               <GitFork className="mr-2 h-4 w-4" />
               <Link
                 href={`https://github.com/${project.repoOwner}/${project.repoName}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="transition-colors hover:text-primary"
+                className="transition-colors group-hover:text-primary group-hover:underline"
               >
                 {project.repoOwner}/{project.repoName}
                 <ExternalLink className="ml-1 inline-block h-3 w-3" />
               </Link>
             </div>
-            <div className="flex items-start text-sm text-muted-foreground">
+            <div className="group flex items-start text-sm text-muted-foreground">
               <div className="flex items-start text-sm text-muted-foreground">
                 <GitBranch className="mr-2 h-4 w-4" />
                 <Link
                   href={`https://github.com/${project.repoOwner}/${project.repoName}/tree/${project.branch}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="transition-colors hover:text-primary"
+                  className="transition-colors group-hover:text-primary group-hover:underline"
                 >
                   {project.branch}
                   <ExternalLink className="ml-1 inline-block h-3 w-3" />

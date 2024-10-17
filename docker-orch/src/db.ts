@@ -40,7 +40,7 @@ export async function updateStatusToDb(
     const query = `
       UPDATE "Project"
       SET status = $1
-      WHERE id = $2
+      WHERE id = $2 AND status != '${PROJECT_STATUS.BUILD_TIMEOUT}' AND status != '${PROJECT_STATUS.DELETE_TIMEOUT}'
     `;
     await pool.query(query, [status, projectId]);
   } catch (err: any) {
