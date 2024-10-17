@@ -1,4 +1,4 @@
-IMAGE_NAME=pulkitxm/vercel-builder-test
+IMAGE_NAME=pulkitxm/deployit-builder
 CONTAINER_NAME=test-vercel-builder
 DOCKERFILE_PATH=Dockerfile
 ENV_FILE=.env

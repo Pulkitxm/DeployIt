@@ -1,12 +1,11 @@
 {
-  "name": "vercel-clone",
+  "name": "deployit-proxy-server",
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "build": "tsc -b",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,md,mdx,css,yaml,yml}\"",
     "check": "prettier --check \"**/*.{ts,tsx,js,jsx,md,mdx,css,yaml,yml}\""
   },
@@ -15,20 +14,14 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.670.0",
-    "@aws-sdk/s3-request-presigner": "^3.670.0",
-    "@vercel/blob": "^0.24.1",
     "axios": "^1.7.7",
-    "cloudinary": "^2.5.0",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
-    "express-http-proxy": "^2.1.1",
     "http-proxy": "^1.18.1",
     "http-proxy-middleware": "^3.0.2",
     "ioredis": "^5.4.1",
     "mime-types": "^2.1.35",
     "pg": "^8.13.0",
-    "prettier": "^3.3.3",
-    "streamifier": "^0.1.1"
+    "prettier": "^3.3.3"
   }
 }

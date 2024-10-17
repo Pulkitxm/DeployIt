@@ -1,5 +1,5 @@
 {
-  "name": "docker-builder",
+  "name": "deployit-docker-builder",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {

@@ -1,0 +1,47 @@
+# Node modules
+node_modules
+
+# Next.js build output
+.next
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Editor directories and files
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Test coverage
+coverage
+
+# Temporary files
+*.tmp
+*.temp
+
+# Prisma
+prisma/*.db
+
+# Debug files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build files
+out
+
+# Misc
+README.md

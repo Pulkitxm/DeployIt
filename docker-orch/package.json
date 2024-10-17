@@ -1,4 +1,5 @@
 {
+    "name": "deployit-docker-orch",
     "devDependencies": {
         "@types/dockerode": "^3.3.31",
         "@types/pg": "^8.11.10",
