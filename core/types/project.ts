@@ -55,6 +55,7 @@ export const validateFrojectUpdateFormType = z.object({
     message: "Slug is required.",
   }),
   private: z.boolean(),
+  showOnHome: z.boolean(),
 });
 
 export type ProjectUpdateFormType = z.infer<

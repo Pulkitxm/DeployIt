@@ -18,7 +18,7 @@ export default function ImportProject({
   setImportProjectData: React.Dispatch<React.SetStateAction<ImportProjectType>>;
 }) {
   return (
-    <div className="flex h-full w-full flex-col items-center overflow-y-auto overflow-x-hidden bg-background pt-40 text-foreground">
+    <div className="flex h-full w-full flex-col items-center justify-center overflow-y-auto overflow-x-hidden bg-background py-10 text-foreground">
       <main className="mx-auto max-w-6xl p-8 xl:w-[900px]">
         <h1 className="mb-2 text-4xl font-bold">You&apos;re almost done.</h1>
         <p className="mb-8 text-muted-foreground">

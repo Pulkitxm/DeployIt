@@ -6,7 +6,7 @@ import { REDIRECT_SIGN_IN_PATH, REDIRECT_SIGN_OUT_PATH } from "@/lib/config";
 
 const login = () => {
   signIn("github", {
-    callbackUrl: REDIRECT_SIGN_IN_PATH || "/dashboard",
+    callbackUrl: REDIRECT_SIGN_IN_PATH ?? "/dashboard",
   });
 };
 

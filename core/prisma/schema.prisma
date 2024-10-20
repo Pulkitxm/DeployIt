@@ -39,6 +39,7 @@ model Project {
   updatedAt  DateTime @updatedAt
   private    Boolean  @default(false)
   is_deleted Boolean  @default(false)
+  showOnHome Boolean  @default(false)
 
   // Build & web info
   size   Int    @default(0)

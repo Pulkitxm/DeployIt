@@ -4,8 +4,8 @@ import { ImportProjectType, PROJECT_STATUS } from "@/types/project";
 import { prisma } from "@/db";
 import { getServerSession } from "next-auth";
 import { generateSlug } from "@/lib/project";
-import redis from "@/lib/redis";
 import { getAccessTokenByEmail } from "@/db/user";
+import { leftPushEvent } from "@/lib/redis";
 
 export async function importProject(importProject: ImportProjectType) {
   const session = await getServerSession();
@@ -61,12 +61,8 @@ export async function importProject(importProject: ImportProjectType) {
     }),
   );
 
-  if (redis) {
-    console.log({
-      ...importProject,
-      GITHUB_TOKEN: accessToken,
-    });
-    await redis.lpush(
+  try {
+    await leftPushEvent(
       "project_queue",
       JSON.stringify({
         ...importProject,
@@ -85,10 +81,24 @@ export async function importProject(importProject: ImportProjectType) {
         status: PROJECT_STATUS.BUILD_IN_QUEUE,
       },
     });
+    return {
+      success: true,
+      id: newProject.id,
+    };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
+    console.log(err);
+    await prisma.project.update({
+      where: {
+        id: newProject.id,
+      },
+      data: {
+        status: PROJECT_STATUS.BUILD_FAILED,
+      },
+    });
+    return {
+      success: false,
+      message: "Failed to import project",
+    };
   }
-
-  return {
-    success: true,
-    id: newProject.id,
-  };
 }

@@ -8,7 +8,7 @@ export default async function Dashboard() {
   const session = await getServerSession();
   if (!session)
     return (
-      <div className="flex h-screen w-screen items-center justify-center">
+      <div className="flex h-full w-full items-center justify-center">
         <ProtectRouteUI />
       </div>
     );
@@ -20,7 +20,7 @@ export default async function Dashboard() {
   } catch (e: any) {
     if (e.message === "User not found") {
       return (
-        <div className="flex h-screen w-screen items-center justify-center">
+        <div className="flex h-full w-full items-center justify-center">
           <ProtectRouteUI />
         </div>
       );

@@ -17,7 +17,7 @@ pm2Logs:
 	pm2 logs deployt-docker-orch
 
 startPm2:
-	cd docker-orch && pm2 start npm --name "deployt-docker-orch" -- start
+	cd docker-orch && pm2 start pnpm --name "deployt-docker-orch" -- start
 
 start:
 	make delPm2 && \

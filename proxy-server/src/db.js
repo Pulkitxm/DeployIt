@@ -1,8 +1,7 @@
 import pkg from "pg";
 import { DATABASE_URL } from "./envVars.js";
 
-const { Pool } = pkg;
-const pool = new Pool({ connectionString: DATABASE_URL });
+const { Client } = pkg;
 
 export async function getProjectDetails(projectSlug) {
   try {
@@ -12,11 +11,13 @@ export async function getProjectDetails(projectSlug) {
     `
       .trim()
       .replace(/\s+/g, " ");
-    const client = await pool.connect();
+    const client = new Client({ connectionString: DATABASE_URL });
+    await client.connect();
     const res = await client.query(query, [projectSlug]);
     if (!res) return null;
     const id = res.rows[0].id;
     increaeVisitCount(id);
+    await client.end();
     return { id, private: res.rows[0].private, status: res.rows[0].status };
   } catch (err) {
     console.error("Error fetching project ID from database:", err.message);
@@ -30,8 +31,10 @@ export async function increaeVisitCount(projectId) {
       SET "views" = "views" + 1
       WHERE id = $1
     `;
-    const client = await pool.connect();
+    const client = new Client({ connectionString: DATABASE_URL });
+    await client.connect();
     const res = await client.query(query, [projectId]);
+    await client.end();
     return res.rows[0].id;
   } catch (err) {
     console.error("Error fetching project ID from database:", err.message);

@@ -20,6 +20,7 @@ import { NEXT_PUBLIC_WEB_SERVER } from "@/lib/envVars";
 import { Input } from "../ui/input";
 import { useToast } from "@/hooks/use-toast";
 import ProjectStatus from "@/components/ProjectDetails/ProjectStatus";
+import HomeIcon from "@/components/ProjectDetails/HomeIcon";
 
 export function Project({
   project,
@@ -51,6 +52,7 @@ export function Project({
             {project.name}
           </CardTitle>
           <ProjectStatus id={project.id} />
+          {project.showOnHome && <HomeIcon />}
         </div>
         <div className="flex space-x-2">
           <TooltipProvider>

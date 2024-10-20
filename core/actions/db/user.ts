@@ -43,6 +43,7 @@ export async function getProjects() {
       updatedAt: true,
       slug: true,
       status: true,
+      showOnHome: true,
     },
   });
 
@@ -73,6 +74,7 @@ export async function getProjectDetails(projectId: string) {
       private: true,
       views: true,
       status: true,
+      showOnHome: true,
     },
   });
   if (!project) return null;
@@ -104,6 +106,7 @@ export async function updateProject(
     name: string;
     slug: string;
     private: boolean;
+    showOnHome: boolean;
   },
 ) {
   const session = await getServerSession();
@@ -111,6 +114,12 @@ export async function updateProject(
 
   const userId = await getUserIdByEmail(session.user.email);
   if (!userId) throw new Error("User not found");
+
+  const slugPattern = /^[a-zA-Z0-9\-]+$/;
+  if (!slugPattern.test(values.slug))
+    throw new Error(
+      "Invalid slug: only alphanumeric characters and hyphens are allowed",
+    );
 
   const project = await prisma.project.update({
     where: {
@@ -121,6 +130,7 @@ export async function updateProject(
       name: values.name,
       slug: values.slug,
       private: values.private,
+      showOnHome: values.showOnHome,
     },
   });
 

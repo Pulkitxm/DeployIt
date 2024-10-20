@@ -49,7 +49,7 @@ export default function DashboardClient({
   };
 
   return (
-    <div className="mt-14 flex h-full w-full flex-col overflow-hidden p-4 sm:p-6 md:p-8">
+    <div className="flex flex-col p-4 sm:p-6 md:p-10">
       <div className="mb-8 flex flex-col space-y-4 md:flex-row md:items-center md:space-x-4 md:space-y-0">
         <div className="relative flex-grow">
           <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 transform text-muted-foreground" />

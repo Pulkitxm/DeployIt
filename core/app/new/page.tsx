@@ -2,10 +2,10 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
-import { getRepos } from "@/actions/gh/repos";
 import { Repo } from "@/types/gh";
 import ProtectClientRoute from "@/components/ProtectRoute/ProtectClientRoute";
 import Onboarding from "@/components/OnBoarding";
+import { getRepos } from "@/actions/gh/repos";
 
 export default function New() {
   const { data: session } = useSession();
@@ -35,7 +35,7 @@ export default function New() {
   if (protectRoute) return protectRoute;
 
   return (
-    <div className="flex h-screen w-screen items-center justify-center">
+    <div className="flex h-full w-full items-center justify-center overflow-y-auto">
       <Onboarding
         repos={repos}
         loading={loading}

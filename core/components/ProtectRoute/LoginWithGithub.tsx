@@ -3,10 +3,13 @@
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { GithubIcon } from "lucide-react";
+import { REDIRECT_SIGN_IN_PATH } from "@/lib/config";
 
 export default function LoginWithGithub() {
   const onSignin = () => {
-    signIn("github");
+    signIn("github", {
+      callbackUrl: REDIRECT_SIGN_IN_PATH ?? "/dashboard",
+    });
   };
 
   return (

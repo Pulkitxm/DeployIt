@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/db";
-import redis from "@/lib/redis";
+import { leftPushEvent } from "@/lib/redis";
 import { PROJECT_STATUS } from "@/types/project";
 import { getServerSession } from "next-auth";
 
@@ -40,14 +40,7 @@ export async function deleteProject(projectId: string) {
     };
   }
 
-  if (!redis) {
-    return {
-      success: false,
-      message: "Project not deleted",
-    };
-  }
-
-  await redis.lpush(
+  await leftPushEvent(
     "project_queue",
     JSON.stringify({
       projectId,

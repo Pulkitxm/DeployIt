@@ -37,7 +37,7 @@ export default function Onboarding({
     <div
       className={`flex h-full w-full flex-col items-center justify-center bg-${
         theme === "light" ? "white" : "black"
-      } p-8 text-${theme === "light" ? "black" : "white"}`}
+      } p-8 pt-0 text-${theme === "light" ? "black" : "white"}`}
     >
       <div className="mx-auto max-w-6xl">
         <h1

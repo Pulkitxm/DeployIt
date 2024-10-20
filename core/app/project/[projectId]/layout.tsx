@@ -21,11 +21,10 @@ export default async function ProjectDetailsLayout({
   }
 
   return (
-    <div className="container mx-auto mt-20 p-6">
+    <div className="mx-auto h-full p-6 py-10 pb-40">
       <header className="mb-8">
         <h1 className="mb-4 text-3xl font-bold">Project Details</h1>
         <ProjectTabs projectId={params.projectId} />{" "}
-        {/* Use the client component */}
       </header>
       {children}
     </div>

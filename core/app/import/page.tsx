@@ -35,7 +35,7 @@ export default function Import() {
 
   if (!repoOwner || !repoName) {
     return (
-      <div className="flex h-screen flex-col items-center justify-center bg-background text-foreground">
+      <div className="flex h-full flex-col items-center justify-center overflow-y-auto bg-background text-foreground">
         <Alert variant="destructive" className="max-w-[300px]">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>

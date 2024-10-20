@@ -47,6 +47,7 @@ export default function ProjectSettings({
       name: project.name,
       slug: project.slug,
       private: project.private,
+      showOnHome: project.showOnHome,
     },
   });
 
@@ -135,6 +136,27 @@ export default function ProjectSettings({
                     <FormLabel className="text-base">Private Project</FormLabel>
                     <FormDescription>
                       Make your project private and only accessible to you.
+                    </FormDescription>
+                  </div>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="showOnHome"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                  <div className="space-y-0.5">
+                    <FormLabel className="text-base">List on Home</FormLabel>
+                    <FormDescription>
+                      Show your project on the home page.(It is refreshed every
+                      1 hour)
                     </FormDescription>
                   </div>
                   <FormControl>

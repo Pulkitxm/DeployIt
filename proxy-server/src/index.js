@@ -62,7 +62,27 @@ proxy.on("proxyReq", (proxyReq, req) => {
 });
 
 proxy.on("proxyRes", (proxyRes, req, res) => {
-  const awsKeywords = ["amz-", "x-amz-", "s3", "aws", "vercel", "cdn"];
+  const awsKeywords = [
+    "amz-",
+    "x-amz-",
+    "s3",
+    "aws",
+    "vercel",
+    "cdn",
+    "digitaloceanspaces",
+    "cloudflare",
+    "cloudfront",
+    "aws-us-gov",
+    "aws-cn",
+    "aws-iso",
+    "aws-iso-b",
+    "digitalocean",
+    "aws-s3",
+    "aws-s3-cn",
+    "aws-s3-us-gov",
+    "aws-s3-iso",
+    "aws-s3-iso-b",
+  ];
 
   Object.keys(proxyRes.headers).forEach((header) => {
     const headerLower = header.toLowerCase();
