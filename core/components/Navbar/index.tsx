@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Github } from "lucide-react";
 import ThemeToggle from "@/components/Navbar/ThemeToggle";
 import AuthButtons, { AuthButtonsSm } from "./AuthButtons";
 
@@ -61,6 +61,14 @@ export default function Navbar() {
             </div>
             <div className="hidden sm:flex sm:items-center sm:space-x-2">
               <ThemeToggle />
+              <Link
+                href="https://github.com/Pulkitxm/DeployIt"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center rounded-md px-3 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
+              >
+                <Github className="h-5 w-5" />
+              </Link>
               <AuthButtons />
             </div>
             <div className="flex items-center sm:hidden">
@@ -91,6 +99,15 @@ export default function Navbar() {
                   {item.name}
                 </Link>
               ))}
+              <Link
+                href="https://github.com/Pulkitxm/DeployIt"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center rounded-md px-3 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
+              >
+                <Github className="mr-2 h-5 w-5" />
+                GitHub
+              </Link>
               <div className="mt-4 space-y-2">
                 <AuthButtonsSm />
               </div>

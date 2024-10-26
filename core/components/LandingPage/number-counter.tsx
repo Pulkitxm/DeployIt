@@ -7,18 +7,19 @@ export default function NumberIncrement({
 }: {
   finalNumber?: number;
 }) {
-  const [number, setNumber] = useState(0);
+  const [number, setNumber] = useState(50);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
       setNumber((prev) => {
-        if (prev >= finalNumber) {
+        if (prev < 50) return 50;
+        else if (prev >= finalNumber) {
           clearInterval(intervalId);
           return prev;
         }
         return prev + 1;
       });
-    }, 50);
+    }, 20);
     return () => clearInterval(intervalId);
   }, [finalNumber]);
 

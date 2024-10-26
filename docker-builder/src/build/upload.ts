@@ -30,7 +30,7 @@ export async function uploadBuildDirContents(
   const files = getFilesFromDirRec(buildDir);
   const sizeOfBuildDir = getSize(files);
   const formatedSizeOfBuildDir = getFormatedSize(sizeOfBuildDir);
-  // console.log("Size of build dir: " + formatedSizeOfBuildDir);
+  console.log("Size of build dir: " + formatedSizeOfBuildDir);
 
   if (sizeOfBuildDir > maxBuildSize) {
     console.log("Size of build dir is too big, try with smaller files.");
